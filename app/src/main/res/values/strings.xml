@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Goally</string>
+    <string name="Goals">Цели</string>
+    <string name="Save">Сохранить</string>
+    <string name="Discription">Создать цель</string>
+    <string name="HintCreateGoal">Введите название цели</string>
+    <string name="CreateNewTarget">Создать задачу</string>
+</resources>
