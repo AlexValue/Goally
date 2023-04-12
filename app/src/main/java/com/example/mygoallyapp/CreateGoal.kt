@@ -2,18 +2,25 @@ package com.example.mygoallyapp
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.mygoallyapp.Data.GoalBase
+import com.example.mygoallyapp.Data.GoalsDatabase
+import com.example.mygoallyapp.Data.OfflineGoalsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class CreateGoal : AppCompatActivity() {
     var ids = mutableListOf<Int>()
-    var name = ""
+    var nameGoal = ""
+
+//    private val database = GoalsDatabase.getDatabase(application)
+//    private val goalDao = database.goalDao()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +31,7 @@ class CreateGoal : AppCompatActivity() {
 
         val createTargetButton = findViewById<Button>(R.id.CreateTarget)
         createTargetButton.setOnClickListener {
-            name = NameGoal.text.toString()
+            nameGoal = NameGoal.text.toString()
             // Создаем новый EditText
             val editText = EditText(this)
             // Устанавливаем его идентификатор и текст по умолчанию
@@ -51,22 +58,42 @@ class CreateGoal : AppCompatActivity() {
 
 
     fun GoToMain(view: View) {
-        var Goal = Goal()
-        Goal.SetName(name)
+        var tasksList = mutableListOf<String>()
+//        var Goal = Goal()
+//        Goal.SetName(nameGoal)
         if (ids.count() > 0){
             ids.forEach{id ->
-                Goal.AddTask(id.toString())
+                //Goal.AddTask(id.toString())
+                val editText = findViewById<EditText>(id)
+                tasksList.add(editText.text.toString())
             }
         }
         else{
-            Goal.AddTask("")
+            //Goal.AddTask("")
+            tasksList.add("")
+        }
+//
+        val intent = Intent(this, MainActivity::class.java)
+//        intent.putExtra("goal", Goal)
+        val database = GoalsDatabase.getDatabase(application)
+        val goalDao = database.goalDao()
+        val goalsRepository = OfflineGoalsRepository(goalDao)
+
+        startActivity(intent)
+
+        val context: Context = this
+        GlobalScope.launch(Dispatchers.Main) {
+            // асинхронные операции здесь
+            var goalBase = GoalBase(
+                name = nameGoal,
+                tasks = tasksList
+            )
+            goalsRepository.insertGoal(goalBase, context)
         }
 
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("goal", Goal)
-        startActivity(intent)
-    }
 
+
+    }
 
 }
 
