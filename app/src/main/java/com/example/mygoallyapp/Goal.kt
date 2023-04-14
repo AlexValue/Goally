@@ -3,6 +3,7 @@ package com.example.mygoallyapp
 import android.os.Parcel
 import android.os.Parcelable
 
+//Использовался в первой версии, после появления базы данных не актуален
 class Goal : Parcelable {
     var NameGoal : String = ""
     var Tasks : MutableList<String> = mutableListOf()

@@ -19,19 +19,13 @@ class CreateGoal : AppCompatActivity() {
     var ids = mutableListOf<Int>()
     var nameGoal = ""
 
-//    private val database = GoalsDatabase.getDatabase(application)
-//    private val goalDao = database.goalDao()
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_goal)
 
-        val NameGoal = findViewById<EditText>(R.id.NameGoal)
 
         val createTargetButton = findViewById<Button>(R.id.CreateTarget)
         createTargetButton.setOnClickListener {
-            nameGoal = NameGoal.text.toString()
             // Создаем новый EditText
             val editText = EditText(this)
             // Устанавливаем его идентификатор и текст по умолчанию
@@ -58,29 +52,27 @@ class CreateGoal : AppCompatActivity() {
 
 
     fun GoToMain(view: View) {
+        // Находим EditText с названием цели
+        val NameGoal = findViewById<EditText>(R.id.NameGoal)
+        nameGoal = NameGoal.text.toString()
+        // Проходимся по ранее сохраненным id EditText'ов и заполняем лист задач
         var tasksList = mutableListOf<String>()
-//        var Goal = Goal()
-//        Goal.SetName(nameGoal)
         if (ids.count() > 0){
             ids.forEach{id ->
-                //Goal.AddTask(id.toString())
                 val editText = findViewById<EditText>(id)
                 tasksList.add(editText.text.toString())
             }
         }
-        else{
-            //Goal.AddTask("")
-            tasksList.add("")
-        }
+
 //
         val intent = Intent(this, MainActivity::class.java)
-//        intent.putExtra("goal", Goal)
         val database = GoalsDatabase.getDatabase(application)
         val goalDao = database.goalDao()
         val goalsRepository = OfflineGoalsRepository(goalDao)
 
         startActivity(intent)
 
+        //Для занесения цели в базу создаём отдельный процесс через корутины
         val context: Context = this
         GlobalScope.launch(Dispatchers.Main) {
             // асинхронные операции здесь
@@ -90,9 +82,6 @@ class CreateGoal : AppCompatActivity() {
             )
             goalsRepository.insertGoal(goalBase, context)
         }
-
-
-
     }
 
 }

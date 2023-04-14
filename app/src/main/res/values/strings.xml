@@ -4,5 +4,6 @@
     <string name="Save">Сохранить</string>
     <string name="Discription">Создать цель</string>
     <string name="HintCreateGoal">Введите название цели</string>
-    <string name="CreateNewTarget">Создать задачу</string>
+    <string name="CreateNewTask">Создать задачу</string>
+    <string name="HintTask">Введите задачу</string>
 </resources>

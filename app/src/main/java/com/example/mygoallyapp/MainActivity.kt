@@ -21,61 +21,29 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-//    private val database = GoalsDatabase.getDatabase(application)
-//    private val goalDao = database.goalDao()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Добавление нужных в коде элементов интерфеса и получение доступа к базе данных
         val scrollView = findViewById<ScrollView>(R.id.listGoals)
-        //val goal = intent.getParcelableExtra<Goal>("goal")
-//        if (goal != null){
-//            goals.add(goal)
-//        }
-
         val database = GoalsDatabase.getDatabase(application)
         val goalDao = database.goalDao()
         var goalsBase = goalDao.getAllGoals()
         showGoalsInScrollView(goalsBase, scrollView, this)
-//        if (goals.count() > 0) {
-//            showGoalsInScrollView(goals, scrollView, this)
-//
-////            Toast.makeText(
-////                this,
-////                "Goal name: ${goal?.NameGoal}, tasks: ${goal?.Tasks}",
-////                Toast.LENGTH_SHORT
-////            ).show()
-//        }
     }
 
-//    fun showGoalsInScrollView(goals: List<Goal>, scrollView: ScrollView, context: Context) {
-//        val linearLayout = LinearLayout(context)
-//        linearLayout.orientation = LinearLayout.VERTICAL
-//        val layoutParams = LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.MATCH_PARENT,
-//            LinearLayout.LayoutParams.WRAP_CONTENT
-//        )
-//
-//        goals.forEach { goal ->
-//            val textView = TextView(context)
-//            textView.text = goal.NameGoal
-//            textView.gravity = Gravity.CENTER
-//            textView.setBackgroundColor(Color.LTGRAY)
-//            textView.setTextColor(Color.BLACK)
-//            textView.setPadding(
-//                dpToPx(16f, context),
-//                dpToPx(8f, context),
-//                dpToPx(16f, context),
-//                dpToPx(8f, context)
-//            )
-//
-//            linearLayout.addView(textView, layoutParams)
-//        }
-//
-//        scrollView.addView(linearLayout)
-//    }
 
+    /**
+    Эта функция принимает поток [Flow] списка [List] [GoalBase] и отображает цели в [ScrollView] с
+    [TextView] для каждой цели. Функция использует [lifecycleScope.launch] для сбора данных из потока
+    в корутине и обновляет представление на основном потоке, используя [ScrollView] и [LinearLayout].
+
+    @param goals - [Flow] из [List] элементов [GoalBase], представляющих список целей, которые будут отображаться.
+    @param scrollView - [ScrollView], где будут отображаться [TextView] с целями.
+    @param context - [Context], используется для создания [LinearLayout] и для преобразования dp в пиксели.
+     */
     fun showGoalsInScrollView(goals: Flow<List<GoalBase>>, scrollView: ScrollView, context: Context) {
         val linearLayout = LinearLayout(context)
         linearLayout.orientation = LinearLayout.VERTICAL
@@ -100,22 +68,6 @@ class MainActivity : AppCompatActivity() {
                         dpToPx(8f, context)
                     )
 
-//                    goal.tasks.forEach { task ->
-//                        val taskTextView = TextView(context)
-//                        taskTextView.text = task
-//                        taskTextView.gravity = Gravity.CENTER
-//                        taskTextView.setBackgroundColor(Color.WHITE)
-//                        taskTextView.setTextColor(Color.BLACK)
-//                        taskTextView.setPadding(
-//                            dpToPx(16f, context),
-//                            dpToPx(8f, context),
-//                            dpToPx(16f, context),
-//                            dpToPx(8f, context)
-//                        )
-//
-//                        linearLayout.addView(taskTextView, layoutParams)
-//                    }
-
                     linearLayout.addView(textView, layoutParams)
                 }
 
@@ -126,19 +78,24 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+    Функция получает масштаб пикселей на экране устройства и умножает на количество dp,
+    чтобы получить эквивалентное количество пикселей в зависимости от разрешения экрана.
+    Также добавляет 0.5f и преобразуем результат в целое число, чтобы обеспечить правильное округление
 
+    @param dp - конвертируемое значение
+    @param context - переменная позволяет получать разрешение экрана
+    @return dp
+     */
     fun dpToPx(dp: Float, context: Context): Int {
         val scale = context.resources.displayMetrics.density
         return (dp * scale + 0.5f).toInt()
     }
 
-    var goals = mutableListOf<Goal>()
-
     fun GoToAddGoal(view: View) {
         val intent = Intent(this, CreateGoal::class.java)
         startActivity(intent)
     }
-
 }
 
 
