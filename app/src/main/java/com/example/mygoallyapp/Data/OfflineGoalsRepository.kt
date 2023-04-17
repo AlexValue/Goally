@@ -15,8 +15,8 @@ class OfflineGoalsRepository(private val goalDao: GoalDao) : GoalsRepository {
 
     override fun getGoalStream(id: Int, context: Context): Flow<GoalBase?> {
         return getDatabase(context.applicationContext).goalDao().getGoalById(id)
-            .map { it } // преобразование Flow<*> в Flow<List<GoalBase>>
-            .flowOn(Dispatchers.IO)
+//            .map { it } // преобразование Flow<*> в Flow<GoalBase>
+//            .flowOn(Dispatchers.IO)
     }
 
     override suspend fun insertGoal(goalBase: GoalBase, context: Context) {

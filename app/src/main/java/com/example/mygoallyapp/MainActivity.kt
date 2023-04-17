@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                 goalList.forEach { goal ->
                     val textView = TextView(context)
                     textView.text = goal.name
+                    textView.id = goal.id
                     textView.gravity = Gravity.CENTER
                     textView.setBackgroundColor(Color.LTGRAY)
                     textView.setTextColor(Color.BLACK)
@@ -67,6 +68,12 @@ class MainActivity : AppCompatActivity() {
                         dpToPx(16f, context),
                         dpToPx(8f, context)
                     )
+                    textView.setOnClickListener {
+                        val intent = Intent(context, GoalView::class.java)
+                        intent.putExtra("goal_id", textView.id)
+                        context.startActivity(intent)
+                    }
+
 
                     linearLayout.addView(textView, layoutParams)
                 }

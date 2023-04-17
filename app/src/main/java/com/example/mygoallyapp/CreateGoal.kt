@@ -55,9 +55,34 @@ class CreateGoal : AppCompatActivity() {
         // Находим EditText с названием цели
         val NameGoal = findViewById<EditText>(R.id.NameGoal)
         nameGoal = NameGoal.text.toString()
+
+        //Пока не работает
+//        if (nameGoal.count() <= 0){
+//            val parentLayout = findViewById<LinearLayout>(R.id.main)
+//
+//            // Создаем новый LinearLayout с ориентацией VERTICAL
+//            val linearLayout = LinearLayout(this)
+//            linearLayout.orientation = LinearLayout.VERTICAL
+//
+//            // Создаем новый TextView
+//            val textView = TextView(this)
+//            textView.text = "Введите название цели"
+//            textView.setTextColor(Color.RED)
+//
+//            // Добавляем TextView в LinearLayout
+//            linearLayout.addView(textView)
+//
+//            // Получаем макет параметры EditText
+//            val layoutParams = NameGoal.layoutParams as LinearLayout.LayoutParams
+//
+//            // Добавляем LinearLayout в родительский LinearLayout перед EditText
+//            parentLayout.addView(linearLayout, parentLayout.indexOfChild(NameGoal), layoutParams)
+//        }
+
+
         // Проходимся по ранее сохраненным id EditText'ов и заполняем лист задач
-        var tasksList = mutableListOf<String>()
-        if (ids.count() > 0){
+        val tasksList = mutableListOf<String>()
+        if (ids.isNotEmpty()){
             ids.forEach{id ->
                 val editText = findViewById<EditText>(id)
                 tasksList.add(editText.text.toString())
@@ -76,7 +101,7 @@ class CreateGoal : AppCompatActivity() {
         val context: Context = this
         GlobalScope.launch(Dispatchers.Main) {
             // асинхронные операции здесь
-            var goalBase = GoalBase(
+            val goalBase = GoalBase(
                 name = nameGoal,
                 tasks = tasksList
             )
