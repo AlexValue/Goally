@@ -23,11 +23,11 @@
         android:id="@+id/NameGoal"
         android:layout_width="348dp"
         android:layout_height="75dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="40dp"
         android:contentDescription="@string/DiscriptionZero"
         android:gravity="center"
-        android:textSize="20sp"
         android:text="@string/Goal"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +36,46 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="409dp"
-        android:layout_height="498dp"
+        android:layout_height="350dp"
+        android:layout_marginBottom="192dp"
         android:contentDescription="@string/DiscriptionZero"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NameGoal">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
 
     </ScrollView>
+
+    <ScrollView
+        android:id="@+id/scrollCreate"
+        android:layout_width="340dp"
+        android:layout_height="190dp"
+        android:contentDescription="@string/DiscriptionZero"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/AddTask"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/AddNewTask" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
