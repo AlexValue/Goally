@@ -19,12 +19,19 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val currentDateTextView: TextView = findViewById(R.id.current_date_text_view)
+        val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy", Locale.getDefault())
+        val currentDate = dateFormat.format(Date())
+        currentDateTextView.text = currentDate
 
         //Добавление нужных в коде элементов интерфеса и получение доступа к базе данных
         val scrollView = findViewById<ScrollView>(R.id.listGoals)
@@ -47,10 +54,16 @@ class MainActivity : AppCompatActivity() {
     fun showGoalsInScrollView(goals: Flow<List<GoalBase>>, scrollView: ScrollView, context: Context) {
         val linearLayout = LinearLayout(context)
         linearLayout.orientation = LinearLayout.VERTICAL
+
+        val margin1 = dpToPx(10f, context)
+        val margin2 = dpToPx(20f, context)
+
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
-        )
+        ).apply {
+            setMargins(margin2, margin1, margin2, 0)
+        }
 
         lifecycleScope.launch {
             goals.collect { goalList ->
@@ -59,8 +72,8 @@ class MainActivity : AppCompatActivity() {
                     val textView = TextView(context)
                     textView.text = goal.name
                     textView.id = goal.id
-                    textView.gravity = Gravity.CENTER
-                    textView.setBackgroundColor(Color.LTGRAY)
+                    textView.gravity = Gravity.LEFT
+                    textView.setBackgroundResource(R.drawable.goal_item_background) // Используйте созданный фон
                     textView.setTextColor(Color.BLACK)
                     textView.setPadding(
                         dpToPx(16f, context),
@@ -73,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("goal_id", textView.id)
                         context.startActivity(intent)
                     }
-
 
                     linearLayout.addView(textView, layoutParams)
                 }

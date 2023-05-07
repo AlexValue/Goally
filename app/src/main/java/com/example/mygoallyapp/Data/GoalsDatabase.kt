@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 
-@Database(entities = [GoalBase::class], version = 1)
+@Database(entities = [GoalBase::class], version = 2)
 @TypeConverters(MutableListTypeConverter::class)
 abstract class GoalsDatabase : RoomDatabase() {
     abstract fun goalDao(): GoalDao

@@ -9,5 +9,6 @@ data class GoalBase(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    val tasks: MutableList<String>
+    val unfulfilledTasks: MutableList<String>,
+    val fulfilledTasks: MutableList<String>
 )

@@ -10,7 +10,10 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@android:color/white</item> <!-- Цвет верхней строки -->
+        <item name="android:windowLightStatusBar">true</item> <!-- Текст на верхней строке будет тёмным -->
+        <!-- Navigation bar color. -->
+        <item name="android:navigationBarColor">@android:color/white</item> <!-- Цвет панели навигации -->
+        <item name="android:windowLightNavigationBar">true</item> <!-- Цвет иконок на панели навигации будет тёмным -->
     </style>
 </resources>

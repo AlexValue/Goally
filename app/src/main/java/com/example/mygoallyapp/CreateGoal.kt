@@ -103,7 +103,8 @@ class CreateGoal : AppCompatActivity() {
             // асинхронные операции здесь
             val goalBase = GoalBase(
                 name = nameGoal,
-                tasks = tasksList
+                unfulfilledTasks = tasksList,
+                fulfilledTasks = mutableListOf()
             )
             goalsRepository.insertGoal(goalBase, context)
         }

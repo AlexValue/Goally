@@ -2,6 +2,7 @@
     <string name="app_name">Goally</string>
     <string name="Goals">Цели</string>
     <string name="Goal">Цель</string>
+    <string name="Hello">Добрый день!</string>
     <string name="Save">Сохранить</string>
     <string name="Discription">Создать цель</string>
     <string name="HintCreateGoal">Введите название цели</string>
