@@ -38,14 +38,14 @@ class CreateGoal : AppCompatActivity() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            layoutParams.topMargin = resources.getDimension(R.dimen.margin_100dp).toInt()
+            layoutParams.topMargin = resources.getDimension(R.dimen.margin_30dp).toInt()
             // Добавляем новый EditText на место кнопки CreateTarget
             val linearLayout = createTargetButton.parent as LinearLayout
             val index = linearLayout.indexOfChild(createTargetButton)
             linearLayout.addView(editText, index, layoutParams)
-            // Сдвигаем кнопку CreateTarget вниз на 50dp
+            // Сдвигаем кнопку CreateTarget вниз на 30dp
             val createTargetButtonLayoutParams = createTargetButton.layoutParams as LinearLayout.LayoutParams
-            createTargetButtonLayoutParams.topMargin += resources.getDimension(R.dimen.margin_50dp).toInt()
+            createTargetButtonLayoutParams.topMargin += resources.getDimension(R.dimen.margin_30dp).toInt()
             createTargetButton.layoutParams = createTargetButtonLayoutParams
         }
     }

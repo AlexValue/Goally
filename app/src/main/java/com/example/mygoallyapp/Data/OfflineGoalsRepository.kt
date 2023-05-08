@@ -36,6 +36,4 @@ class OfflineGoalsRepository(private val goalDao: GoalDao) : GoalsRepository {
             getDatabase(context.applicationContext).goalDao().update(goalBase)
         }
     }
-
-
 }

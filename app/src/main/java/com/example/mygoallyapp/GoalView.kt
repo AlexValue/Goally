@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
 import com.example.mygoallyapp.Data.OfflineGoalsRepository
@@ -53,10 +55,6 @@ class GoalView : AppCompatActivity() {
             // Добавляем goalInfoView в корневой макет активности
             mainLayout.addView(goalInfoView)
         }
-        //val addTaskButton = findViewById<Button>(R.id.AddTask)
-//        addTaskButton.setOnClickListener {
-//            addNewEditText(this)
-//        }
     }
 
     fun showGoalInfo1(id: Int, context: Context, onGoalInfoReady: (View) -> Unit) {
@@ -64,7 +62,7 @@ class GoalView : AppCompatActivity() {
         val goalDao = database.goalDao()
         val goalsRepository = OfflineGoalsRepository(goalDao)
 
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch {
             val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
             if (goal != null) {
                 goalBaseStart = goal
@@ -94,11 +92,12 @@ class GoalView : AppCompatActivity() {
                 rootLayout.addView(tasksLayout)
 
                 goal.unfulfilledTasks.forEach { task ->
-                    createTaskLayout(context, task, goal, goalsRepository, tasksLayout)
+                    if (task.isNotBlank()) { // Add this line to check if the task is not empty
+                        createTaskLayout(context, task, goal, goalsRepository, tasksLayout)
+                    }
                 }
 
                 displayFulfilledTasks(goal, tasksLayout, context)
-
                 onGoalInfoReady(rootLayout)
             }
         }
@@ -143,22 +142,27 @@ class GoalView : AppCompatActivity() {
             toggleCircleView(circleView, !isChecked)
             strikeThroughText(taskTextView, !isChecked)
             circleView.tag = !isChecked
-            if (!isChecked) {
-                GlobalScope.launch {
-                    moveTaskToEnd(goal, task, goalsRepository)
-                    withContext(Dispatchers.Main) {
-                        tasksLayout.removeView(taskLayout)
-                        createTaskLayout(context, task, goal, goalsRepository, tasksLayout)
-                    }
-                }
-            }
+
+            onTaskStatusChanged(goal, task, !isChecked, goalsRepository, tasksLayout, context)
+            tasksLayout.removeView(taskLayout)
         }
+
+
         taskLayout.addView(taskTextView)
         taskLayout.addView(circleView, circleLayoutParams)
         tasksLayout.addView(taskLayout)
     }
 
+    private suspend fun markTaskAsFulfilled(goal: GoalBase, task: String, goalsRepository: OfflineGoalsRepository) {
+        val updatedUnfulfilledTasks = goal.unfulfilledTasks.toMutableList()
+        updatedUnfulfilledTasks.remove(task)
 
+        val updatedFulfilledTasks = goal.fulfilledTasks.toMutableList()
+        updatedFulfilledTasks.add(task)
+
+        val updatedGoal = goal.copy(unfulfilledTasks = updatedUnfulfilledTasks, fulfilledTasks = updatedFulfilledTasks)
+        goalsRepository.updateGoal(updatedGoal, this)
+    }
 
     private fun strikeThroughText(textView: TextView, strikeThrough: Boolean) {
         if (strikeThrough) {
@@ -168,129 +172,20 @@ class GoalView : AppCompatActivity() {
         }
     }
 
+
+
     private suspend fun moveTaskToEnd(goal: GoalBase, task: String, goalsRepository: OfflineGoalsRepository) {
         val updatedUnfulfilledTasks = goal.unfulfilledTasks.toMutableList()
         updatedUnfulfilledTasks.remove(task)
-        updatedUnfulfilledTasks.add(task)
 
-        val updatedGoal = goal.copy(unfulfilledTasks = updatedUnfulfilledTasks)
+        val updatedFulfilledTasks = goal.fulfilledTasks.toMutableList()
+        updatedFulfilledTasks.add(task)
+
+        val updatedGoal = goal.copy(unfulfilledTasks = updatedUnfulfilledTasks, fulfilledTasks = updatedFulfilledTasks)
         goalsRepository.updateGoal(updatedGoal, this)
     }
 
 
-
-    fun showGoalInfo(id: Int, context: Context) {
-        val database = GoalsDatabase.getDatabase(context)
-        val goalDao = database.goalDao()
-        val goalsRepository = OfflineGoalsRepository(goalDao)
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
-            if (goal != null) {
-                goalBaseStart = goal
-                val nameTextView = TextView(context)
-                nameTextView.text = goal.name + "\n"
-                nameTextView.textSize = 18f
-                nameTextView.gravity = Gravity.CENTER
-                nameTextView.setBackgroundColor(Color.LTGRAY)
-                nameTextView.setTextColor(Color.BLACK)
-                nameTextView.setPadding(
-                    dpToPx(16f, context),
-                    dpToPx(8f, context),
-                    dpToPx(16f, context),
-                    dpToPx(8f, context)
-                )
-                val nameLayoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-
-                val tasksLayout = LinearLayout(context)
-                tasksLayout.orientation = LinearLayout.VERTICAL
-
-                goal.unfulfilledTasks.forEach { task ->
-                    val taskLayout = LinearLayout(context)
-                    taskLayout.orientation = LinearLayout.HORIZONTAL
-                    taskLayout.gravity = Gravity.END
-
-                    val taskTextView = TextView(context)
-                    taskTextView.text = task
-                    taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
-                    taskTextView.setBackgroundColor(Color.LTGRAY)
-                    taskTextView.setTextColor(Color.BLACK)
-                    taskTextView.setPadding(
-                        dpToPx(16f, context),
-                        dpToPx(8f, context),
-                        dpToPx(16f, context),
-                        dpToPx(8f, context)
-                    )
-                    val taskHeight = dpToPx(48f, context) // Set the height to 48dp
-                    val layoutParams = LinearLayout.LayoutParams(0, taskHeight, 1f)
-                    layoutParams.gravity = Gravity.CENTER_VERTICAL
-                    layoutParams.marginEnd = dpToPx(16f, context)
-                    taskTextView.layoutParams = layoutParams
-
-                    val circleView = View(context)
-                    circleView.setBackgroundResource(R.drawable.circle)
-                    val circleSize = dpToPx(32f, context) // Set the size of the circle to 32dp
-                    val circleLayoutParams = LinearLayout.LayoutParams(circleSize, circleSize)
-                    circleLayoutParams.gravity = Gravity.CENTER_VERTICAL
-                    taskLayout.addView(taskTextView)
-                    taskLayout.addView(circleView, circleLayoutParams)
-
-                    tasksLayout.addView(taskLayout)
-                }
-
-                val tasksLayoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                tasksLayoutParams.topMargin = dpToPx(16f, context)
-                tasksLayoutParams.bottomMargin = dpToPx(16f, context)
-
-                linearLayout = LinearLayout(context)
-                linearLayout.orientation = LinearLayout.VERTICAL
-                linearLayout.setBackgroundColor(Color.WHITE)
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                linearLayout.addView(nameTextView, nameLayoutParams)
-                linearLayout.addView(tasksLayout, tasksLayoutParams)
-
-                val scrollView = findViewById<ScrollView>(R.id.scrollView)
-                scrollView.removeAllViews()
-                scrollView.addView(linearLayout)
-
-                val addButton = Button(context)
-                addButton.text = "Добавить задачу"
-                addButton.setBackgroundColor(Color.parseColor("#FF6200EE"))
-                addButton.setTextColor(Color.WHITE)
-                addButton.setPadding(
-                    dpToPx(16f, context),
-                    dpToPx(8f, context),
-                    dpToPx(16f, context),
-                    dpToPx(8f, context)
-                )
-                addButton.setOnClickListener {
-                    addNewEditText(addButton ,context)
-//                    val editText = EditText(context)
-//                    editText.hint = "Введите задачу"
-//                    editText.setPadding(
-//                        dpToPx(16f, context),
-//                        dpToPx(8f, context),
-//                        dpToPx(16f, context),
-//                        dpToPx(8f, context)
-//                    )
-//                    linearLayout.addView(editText, layoutParams)
-                }
-                linearLayout.addView(addButton, layoutParams)
-            } else {
-                // Обработка ситуации, когда goal равен null
-                Toast.makeText(context, "Goal not found", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     private fun toggleCircleView(circleView: View, isChecked: Boolean) {
         if (isChecked) {
@@ -300,38 +195,80 @@ class GoalView : AppCompatActivity() {
         }
     }
 
-    private fun displayFulfilledTasks(goal: GoalBase, tasksLayout:  LinearLayout, context: Context) {
+    private fun displayFulfilledTasks(goal: GoalBase, tasksLayout: LinearLayout, context: Context) {
         goal.fulfilledTasks.forEach { task ->
-            val taskLayout = LinearLayout(context)
-            taskLayout.orientation = LinearLayout.HORIZONTAL
-            taskLayout.gravity = Gravity.END
+            if (task.isNotBlank()) { // Add this line to check if the task is not empty
+                val taskLayout = LinearLayout(context)
+                taskLayout.orientation = LinearLayout.HORIZONTAL
+                taskLayout.gravity = Gravity.END
 
-            val taskTextView = TextView(context)
-            taskTextView.text = task
-            taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
-            taskTextView.setBackgroundColor(Color.LTGRAY)
-            taskTextView.setTextColor(Color.BLACK)
-            taskTextView.setPadding(
-                dpToPx(16f, context),
-                dpToPx(8f, context),
-                dpToPx(16f, context),
-                dpToPx(8f, context)
-            )
-            val taskHeight = dpToPx(48f, context) // Set the height to 48dp
-            val layoutParams = LinearLayout.LayoutParams(0, taskHeight, 1f)
-            layoutParams.gravity = Gravity.CENTER_VERTICAL
-            layoutParams.marginEnd = dpToPx(16f, context)
-            taskTextView.layoutParams = layoutParams
+                val taskTextView = TextView(context)
+                taskTextView.text = task
+                taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
+                taskTextView.setBackgroundColor(Color.LTGRAY)
+                taskTextView.setTextColor(Color.BLACK)
+                taskTextView.setPadding(
+                    dpToPx(16f, context),
+                    dpToPx(8f, context),
+                    dpToPx(16f, context),
+                    dpToPx(8f, context)
+                )
+                val taskHeight = dpToPx(48f, context) // Set the height to 48dp
+                val layoutParams = LinearLayout.LayoutParams(0, taskHeight, 1f)
+                layoutParams.gravity = Gravity.CENTER_VERTICAL
+                layoutParams.marginEnd = dpToPx(16f, context)
+                taskTextView.layoutParams = layoutParams
 
-            val checkmarkView = ImageView(context)
-            checkmarkView.setImageResource(R.drawable.checkmark)
-            val checkmarkSize = dpToPx(32f, context) // Set the size of the checkmark to 32dp
-            val checkmarkLayoutParams = LinearLayout.LayoutParams(checkmarkSize, checkmarkSize)
-            checkmarkLayoutParams.gravity = Gravity.CENTER_VERTICAL
-            taskLayout.addView(taskTextView)
-            taskLayout.addView(checkmarkView, checkmarkLayoutParams)
+                // Add strike-through to fulfilled tasks
+                strikeThroughText(taskTextView, true)
+                if (taskTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG != Paint.STRIKE_THRU_TEXT_FLAG) {
+                    Log.e("GoalView", "Task '$task' is not struck through.")
+                }
 
-            tasksLayout.addView(taskLayout)
+
+                val checkmarkView = ImageView(context)
+                checkmarkView.setImageResource(R.drawable.checkmark)
+                val checkmarkSize = dpToPx(32f, context) // Set the size of the checkmark to 32dp
+                val checkmarkLayoutParams = LinearLayout.LayoutParams(checkmarkSize, checkmarkSize)
+                checkmarkLayoutParams.gravity = Gravity.CENTER_VERTICAL
+                taskLayout.addView(taskTextView)
+                taskLayout.addView(checkmarkView, checkmarkLayoutParams)
+
+                tasksLayout.addView(taskLayout)
+            }
+        }
+    }
+
+
+    private fun onTaskStatusChanged(
+        goal: GoalBase,
+        task: String,
+        isChecked: Boolean,
+        goalsRepository: OfflineGoalsRepository,
+        tasksLayout: LinearLayout,
+        context: Context
+    ) {
+        val updatedUnfulfilledTasks = goal.unfulfilledTasks.toMutableList()
+        val updatedFulfilledTasks = goal.fulfilledTasks.toMutableList()
+
+        if (isChecked) {
+            updatedUnfulfilledTasks.remove(task)
+            updatedFulfilledTasks.add(task)
+        } else {
+            updatedFulfilledTasks.remove(task)
+            updatedUnfulfilledTasks.add(task)
+        }
+
+        val updatedGoal = goal.copy(unfulfilledTasks = updatedUnfulfilledTasks, fulfilledTasks = updatedFulfilledTasks)
+        lifecycleScope.launch {
+            goalsRepository.updateGoal(updatedGoal, this@GoalView)
+            withContext(Dispatchers.Main) {
+                tasksLayout.removeAllViews()
+                updatedUnfulfilledTasks.forEach { unfulfilledTask ->
+                    createTaskLayout(context, unfulfilledTask, updatedGoal, goalsRepository, tasksLayout)
+                }
+                displayFulfilledTasks(updatedGoal, tasksLayout, context)
+            }
         }
     }
 
@@ -443,7 +380,7 @@ class GoalView : AppCompatActivity() {
             val database = GoalsDatabase.getDatabase(context)
             val goalDao = database.goalDao()
             val goalsRepository = OfflineGoalsRepository(goalDao)
-            GlobalScope.launch(Dispatchers.Main) {
+            lifecycleScope.launch {
 //                val goal = goalsRepository.getGoalStream(idGoal, context).firstOrNull()
 //                if (goal != null){
 //                    val newNameGoal = goal.name
