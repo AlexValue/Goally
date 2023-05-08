@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                     textView.text = goal.name
                     textView.id = goal.id
                     textView.gravity = Gravity.LEFT
-                    textView.setBackgroundResource(R.drawable.goal_item_background) // Используйте созданный фон
+                    textView.setBackgroundResource(R.drawable.goal_item_background)
                     textView.setTextColor(Color.BLACK)
                     textView.setPadding(
                         dpToPx(16f, context),
