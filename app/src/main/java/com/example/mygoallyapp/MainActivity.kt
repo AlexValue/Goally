@@ -77,9 +77,9 @@ class MainActivity : AppCompatActivity() {
                     textView.setTextColor(Color.BLACK)
                     textView.setPadding(
                         dpToPx(16f, context),
-                        dpToPx(8f, context),
                         dpToPx(16f, context),
-                        dpToPx(8f, context)
+                        dpToPx(16f, context),
+                        dpToPx(16f, context)
                     )
                     textView.setOnClickListener {
                         val intent = Intent(context, GoalView::class.java)
