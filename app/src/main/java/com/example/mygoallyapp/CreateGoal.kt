@@ -104,7 +104,8 @@ class CreateGoal : AppCompatActivity() {
             val goalBase = GoalBase(
                 name = nameGoal,
                 unfulfilledTasks = tasksList,
-                fulfilledTasks = mutableListOf()
+                fulfilledTasks = mutableListOf(),
+                allTask = tasksList.count()
             )
             goalsRepository.insertGoal(goalBase, context)
         }

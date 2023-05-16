@@ -10,5 +10,6 @@ data class GoalBase(
     val id: Int = 0,
     val name: String,
     val unfulfilledTasks: MutableList<String>,
-    val fulfilledTasks: MutableList<String>
+    val fulfilledTasks: MutableList<String>,
+    val allTask: Int
 )

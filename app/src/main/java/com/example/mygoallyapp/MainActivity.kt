@@ -3,15 +3,18 @@ package com.example.mygoallyapp
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
@@ -69,25 +72,58 @@ class MainActivity : AppCompatActivity() {
             goals.collect { goalList ->
                 linearLayout.removeAllViews()
                 goalList.forEach { goal ->
+                    val goalLayout = LinearLayout(context)
+                    goalLayout.orientation = LinearLayout.VERTICAL
+                    goalLayout.setBackgroundResource(R.drawable.goal_item_background)
+                    goalLayout.setOnClickListener {
+                        val intent = Intent(context, GoalView::class.java)
+                        intent.putExtra("goal_id", goal.id)
+                        context.startActivity(intent)
+                    }
+
+                    // Create GoalBase name TextView
                     val textView = TextView(context)
                     textView.text = goal.name
                     textView.id = goal.id
                     textView.gravity = Gravity.LEFT
-                    textView.setBackgroundResource(R.drawable.goal_item_background)
                     textView.setTextColor(Color.BLACK)
                     textView.setPadding(
                         dpToPx(16f, context),
                         dpToPx(16f, context),
                         dpToPx(16f, context),
+                        dpToPx(4f, context) // Reduce padding to minimize space
+                    )
+
+                    // Create Tasks ratio TextView
+                    val tasksRatioTextView = TextView(context)
+                    tasksRatioTextView.text = "${goal.fulfilledTasks.size - 1} / ${goal.allTask}"
+                    tasksRatioTextView.setTextColor(Color.parseColor("#909090"))
+                    tasksRatioTextView.setPadding(
+                        dpToPx(16f, context),
+                        dpToPx(4f, context), // Reduce padding to minimize space
+                        dpToPx(16f, context),
+                        dpToPx(4f, context) // Reduce padding to minimize space
+                    )
+
+                    // Create Tasks ratio ProgressBar
+                    val tasksRatioProgressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
+                    tasksRatioProgressBar.progressDrawable = ContextCompat.getDrawable(context, R.drawable.custom_progress_bar)
+                    tasksRatioProgressBar.max = goal.allTask
+                    tasksRatioProgressBar.progress = goal.fulfilledTasks.size - 1
+                    tasksRatioProgressBar.setPadding(
+                        dpToPx(16f, context),
+                        dpToPx(4f, context), // Reduce padding to minimize space
+                        dpToPx(16f, context),
                         dpToPx(16f, context)
                     )
-                    textView.setOnClickListener {
-                        val intent = Intent(context, GoalView::class.java)
-                        intent.putExtra("goal_id", textView.id)
-                        context.startActivity(intent)
-                    }
 
-                    linearLayout.addView(textView, layoutParams)
+                    // Add views to the goalLayout
+                    goalLayout.addView(textView)
+                    goalLayout.addView(tasksRatioTextView)
+                    goalLayout.addView(tasksRatioProgressBar)
+
+                    // Add goalLayout to the main layout
+                    linearLayout.addView(goalLayout, layoutParams)
                 }
 
                 scrollView.removeAllViews()
@@ -95,6 +131,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 
 
     /**
