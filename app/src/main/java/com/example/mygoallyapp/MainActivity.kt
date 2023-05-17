@@ -94,6 +94,18 @@ class MainActivity : AppCompatActivity() {
                         dpToPx(4f, context) // Reduce padding to minimize space
                     )
 
+                    // Create Deadline TextView
+                    val deadlineTextView = TextView(context)
+                    val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+                    deadlineTextView.text = "Дедлайн: ${sdf.format(goal.getDeadlineAsDate())}"
+                    deadlineTextView.setTextColor(Color.parseColor("#909090"))
+                    deadlineTextView.setPadding(
+                        dpToPx(16f, context),
+                        dpToPx(4f, context), // Reduce padding to minimize space
+                        dpToPx(16f, context),
+                        dpToPx(4f, context) // Reduce padding to minimize space
+                    )
+
                     // Create Tasks ratio TextView
                     val tasksRatioTextView = TextView(context)
                     tasksRatioTextView.text = "${goal.fulfilledTasks.size - 1} / ${goal.allTask}"
@@ -119,6 +131,7 @@ class MainActivity : AppCompatActivity() {
 
                     // Add views to the goalLayout
                     goalLayout.addView(textView)
+                    goalLayout.addView(deadlineTextView)
                     goalLayout.addView(tasksRatioTextView)
                     goalLayout.addView(tasksRatioProgressBar)
 
