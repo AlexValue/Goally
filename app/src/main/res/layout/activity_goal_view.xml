@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#d9dddc"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GoalView">
@@ -21,16 +22,17 @@
 
     <TextView
         android:id="@+id/NameGoal"
-        android:layout_width="348dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="58dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/DiscriptionZero"
         android:gravity="center"
         android:text="@string/Goal"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.098"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
