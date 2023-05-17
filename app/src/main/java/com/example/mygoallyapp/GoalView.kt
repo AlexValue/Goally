@@ -68,12 +68,24 @@ class GoalView : AppCompatActivity() {
                 goalBaseStart = goal
                 val rootLayout = LinearLayout(context)
                 rootLayout.orientation = LinearLayout.VERTICAL
+                rootLayout.setBackgroundResource(R.drawable.goal_item_background)
+                val rootLayoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                rootLayoutParams.setMargins(
+                    dpToPx(8f, context),
+                    dpToPx(8f, context),
+                    dpToPx(8f, context),
+                    dpToPx(8f, context)
+                )
+                rootLayout.layoutParams = rootLayoutParams
 
                 val nameTextView = TextView(context)
                 nameTextView.text = goal.name + "\n"
                 nameTextView.textSize = 18f
                 nameTextView.gravity = Gravity.CENTER
-                nameTextView.setBackgroundColor(Color.LTGRAY)
+                //nameTextView.setBackgroundColor(Color.LTGRAY)
                 nameTextView.setTextColor(Color.BLACK)
                 nameTextView.setPadding(
                     dpToPx(16f, context),
@@ -113,11 +125,23 @@ class GoalView : AppCompatActivity() {
         val taskLayout = LinearLayout(context)
         taskLayout.orientation = LinearLayout.HORIZONTAL
         taskLayout.gravity = Gravity.END
+        taskLayout.setBackgroundResource(R.drawable.box_task)
+        val taskLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        taskLayoutParams.setMargins(
+            dpToPx(8f, context),
+            dpToPx(8f, context),
+            dpToPx(8f, context),
+            dpToPx(8f, context)
+        )
+        taskLayout.layoutParams = taskLayoutParams
 
         val taskTextView = TextView(context)
         taskTextView.text = task
         taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
-        taskTextView.setBackgroundColor(Color.LTGRAY)
+        //taskTextView.setBackgroundColor(Color.LTGRAY)
         taskTextView.setTextColor(Color.BLACK)
         taskTextView.setPadding(
             dpToPx(16f, context),
@@ -201,11 +225,23 @@ class GoalView : AppCompatActivity() {
                 val taskLayout = LinearLayout(context)
                 taskLayout.orientation = LinearLayout.HORIZONTAL
                 taskLayout.gravity = Gravity.END
+                taskLayout.setBackgroundResource(R.drawable.box_task)
+                val taskLayoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                taskLayoutParams.setMargins(
+                    dpToPx(8f, context),
+                    dpToPx(8f, context),
+                    dpToPx(8f, context),
+                    dpToPx(8f, context)
+                )
+                taskLayout.layoutParams = taskLayoutParams
 
                 val taskTextView = TextView(context)
                 taskTextView.text = task
                 taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
-                taskTextView.setBackgroundColor(Color.LTGRAY)
+                //taskTextView.setBackgroundColor(Color.LTGRAY)
                 taskTextView.setTextColor(Color.BLACK)
                 taskTextView.setPadding(
                     dpToPx(16f, context),
