@@ -102,7 +102,6 @@ class CreateGoal : AppCompatActivity() {
             }
         }
 
-//
         val intent = Intent(this, MainActivity::class.java)
         val database = GoalsDatabase.getDatabase(application)
         val goalDao = database.goalDao()
