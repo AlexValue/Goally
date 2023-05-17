@@ -96,9 +96,9 @@ class MainActivity : AppCompatActivity() {
 
                     // Create Deadline TextView
                     val deadlineTextView = TextView(context)
-                    val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-                    deadlineTextView.text = "Дедлайн: ${sdf.format(goal.getDeadlineAsDate())}"
-                    deadlineTextView.setTextColor(Color.parseColor("#909090"))
+                    val sdf = SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
+                    deadlineTextView.text = "${sdf.format(goal.getDeadlineAsDate())}"
+                    deadlineTextView.setTextColor(Color.parseColor("#FF7A00"))
                     deadlineTextView.setPadding(
                         dpToPx(16f, context),
                         dpToPx(4f, context), // Reduce padding to minimize space

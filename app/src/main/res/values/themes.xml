@@ -15,5 +15,7 @@
         <!-- Navigation bar color. -->
         <item name="android:navigationBarColor">@color/background</item> <!-- Цвет панели навигации -->
         <item name="android:windowLightNavigationBar">true</item> <!-- Цвет иконок на панели навигации будет тёмным -->
+
+        <item name="android:windowBackground">@color/background</item>
     </style>
 </resources>
