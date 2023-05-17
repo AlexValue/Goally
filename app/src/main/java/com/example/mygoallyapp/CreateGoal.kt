@@ -1,5 +1,7 @@
 package com.example.mygoallyapp
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,21 +10,53 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
 import com.example.mygoallyapp.Data.OfflineGoalsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class CreateGoal : AppCompatActivity() {
     var ids = mutableListOf<Int>()
     var nameGoal = ""
+    private var selectedDateTime: Calendar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_goal)
 
+        // Настройка кнопки выбора дедлайна
+        val deadlineButton = findViewById<Button>(R.id.deadlineButton)
+        deadlineButton.setOnClickListener {
+            // Открытие DatePickerDialog
+            val datePickerDialog = DatePickerDialog(this,
+                { _, year, monthOfYear, dayOfMonth ->
+                    // Создаем календарь с выбранной датой
+                    val date = Calendar.getInstance().apply {
+                        set(year, monthOfYear, dayOfMonth)
+                    }
+                    // Открытие TimePickerDialog после выбора даты
+                    val timePickerDialog = TimePickerDialog(this,
+                        { _, hourOfDay, minute ->
+                            // Создаем новый календарь, объединяя выбранную дату и время
+                            selectedDateTime = Calendar.getInstance().apply {
+                                time = date.time // Устанавливаем выбранную дату
+                                set(Calendar.HOUR_OF_DAY, hourOfDay) // Устанавливаем выбранное время
+                                set(Calendar.MINUTE, minute)
+                            }
+                            // Обновление текста кнопки после выбора времени
+                            deadlineButton.text = SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault())
+                                .format(selectedDateTime?.time)
+                        }, 12, 0, true)
+                    timePickerDialog.show()
+                }, 2023, 4, 12)
+            datePickerDialog.show()
+        }
 
         val createTargetButton = findViewById<Button>(R.id.CreateTarget)
         createTargetButton.setOnClickListener {
@@ -56,28 +90,7 @@ class CreateGoal : AppCompatActivity() {
         val NameGoal = findViewById<EditText>(R.id.NameGoal)
         nameGoal = NameGoal.text.toString()
 
-        //Пока не работает
-//        if (nameGoal.count() <= 0){
-//            val parentLayout = findViewById<LinearLayout>(R.id.main)
-//
-//            // Создаем новый LinearLayout с ориентацией VERTICAL
-//            val linearLayout = LinearLayout(this)
-//            linearLayout.orientation = LinearLayout.VERTICAL
-//
-//            // Создаем новый TextView
-//            val textView = TextView(this)
-//            textView.text = "Введите название цели"
-//            textView.setTextColor(Color.RED)
-//
-//            // Добавляем TextView в LinearLayout
-//            linearLayout.addView(textView)
-//
-//            // Получаем макет параметры EditText
-//            val layoutParams = NameGoal.layoutParams as LinearLayout.LayoutParams
-//
-//            // Добавляем LinearLayout в родительский LinearLayout перед EditText
-//            parentLayout.addView(linearLayout, parentLayout.indexOfChild(NameGoal), layoutParams)
-//        }
+
 
 
         // Проходимся по ранее сохраненным id EditText'ов и заполняем лист задач
@@ -99,13 +112,14 @@ class CreateGoal : AppCompatActivity() {
 
         //Для занесения цели в базу создаём отдельный процесс через корутины
         val context: Context = this
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch {
             // асинхронные операции здесь
             val goalBase = GoalBase(
                 name = nameGoal,
                 unfulfilledTasks = tasksList,
                 fulfilledTasks = mutableListOf(),
-                allTask = tasksList.count()
+                allTask = tasksList.count(),
+                deadline = selectedDateTime?.timeInMillis ?: 0
             )
             goalsRepository.insertGoal(goalBase, context)
         }

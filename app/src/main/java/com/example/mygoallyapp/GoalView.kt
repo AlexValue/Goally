@@ -33,7 +33,7 @@ class GoalView : AppCompatActivity() {
     var ids = mutableListOf<Int>()
     var lastId = -1
     var countUseAddTask = 0
-    var goalBaseStart = GoalBase( name = "", unfulfilledTasks = mutableListOf(), fulfilledTasks = mutableListOf(), allTask = 0)
+    var goalBaseStart = GoalBase( name = "", unfulfilledTasks = mutableListOf(), fulfilledTasks = mutableListOf(), allTask = 0, deadline = 0)
 
     private lateinit var linearLayout: LinearLayout
     private lateinit var layoutParams: LinearLayout.LayoutParams

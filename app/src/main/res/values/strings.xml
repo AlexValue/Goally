@@ -10,4 +10,5 @@
     <string name="AddNewTask">Добавить задачу</string>
     <string name="HintTask">Введите задачу</string>
     <string name="DiscriptionZero">Продам гараж</string>
+    <string name="ChooseADeadline">Выберите дедлайн</string>
 </resources>
