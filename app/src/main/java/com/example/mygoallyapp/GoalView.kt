@@ -60,7 +60,9 @@ class GoalView : AppCompatActivity() {
     fun showGoalInfo1(id: Int, context: Context, onGoalInfoReady: (View) -> Unit) {
         val database = GoalsDatabase.getDatabase(context)
         val goalDao = database.goalDao()
-        val goalsRepository = OfflineGoalsRepository(goalDao)
+        val userDao = database.userDao()
+        val taskDao = database.taskDao()
+        val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
 
         lifecycleScope.launch {
             val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
@@ -166,6 +168,26 @@ class GoalView : AppCompatActivity() {
             toggleCircleView(circleView, !isChecked)
             strikeThroughText(taskTextView, !isChecked)
             circleView.tag = !isChecked
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val database = GoalsDatabase.getDatabase(context)
+                val taskDao = database.taskDao()
+//                val userDao = database.userDao()
+//                val user = userDao.getAll()[0]
+                val currentTask = taskDao.getAll()[0]
+
+                if (!currentTask.isCompleted) {
+                    currentTask.progress++
+                }
+
+                if (currentTask.progress >= 3 && !currentTask.isCompleted) {
+                    currentTask.isCompleted = true
+//                    user.experience += currentTask.reward
+                }
+
+                taskDao.update(currentTask)
+//                userDao.update(user)
+            }
 
             onTaskStatusChanged(goal, task, !isChecked, goalsRepository, tasksLayout, context)
             tasksLayout.removeView(taskLayout)
@@ -296,8 +318,53 @@ class GoalView : AppCompatActivity() {
         }
 
         val updatedGoal = goal.copy(unfulfilledTasks = updatedUnfulfilledTasks, fulfilledTasks = updatedFulfilledTasks)
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             goalsRepository.updateGoal(updatedGoal, this@GoalView)
+
+            // Здесь мы проверяем, пуст ли список невыполненных задач
+            if (updatedUnfulfilledTasks.isEmpty()) {
+                // Получаем доступ к базе данных и достаем задание с идентификатором
+                val database = GoalsDatabase.getDatabase(context)
+                val taskDao = database.taskDao()
+                val userDao = database.userDao()
+                val user = userDao.getAll().firstOrNull()
+
+                val task3 = taskDao.getAll()[2]
+                val task10 = taskDao.getAll()[3]
+                val task50 = taskDao.getAll()[4]
+
+                // Увеличиваем прогресс на 1
+                task3.progress += 1
+                task10.progress += 1
+                task50.progress += 1
+
+                if (task3.progress >= 3 && !task3.isCompleted) {
+                    task3.isCompleted = true
+                    if (user != null) {
+                        user.experience += task3.reward
+                    }
+                }
+                if (task10.progress >= 10 && !task10.isCompleted) {
+                    task10.isCompleted = true
+                    if (user != null) {
+                        user.experience += task10.reward
+                    }
+                }
+                if (task50.progress >= 50 && !task50.isCompleted) {
+                    task50.isCompleted = true
+                    if (user != null) {
+                        user.experience += task50.reward
+                    }
+                }
+
+                taskDao.update(task3)
+                taskDao.update(task10)
+                taskDao.update(task50)
+                if (user != null) {
+                    userDao.update(user)
+                }
+            }
+
             withContext(Dispatchers.Main) {
                 tasksLayout.removeAllViews()
                 updatedUnfulfilledTasks.forEach { unfulfilledTask ->
@@ -307,6 +374,7 @@ class GoalView : AppCompatActivity() {
             }
         }
     }
+
 
 
 
@@ -415,7 +483,9 @@ class GoalView : AppCompatActivity() {
         if (countUseAddTask > 0){
             val database = GoalsDatabase.getDatabase(context)
             val goalDao = database.goalDao()
-            val goalsRepository = OfflineGoalsRepository(goalDao)
+            val userDao = database.userDao()
+            val taskDao = database.taskDao()
+            val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
             lifecycleScope.launch {
 //                val goal = goalsRepository.getGoalStream(idGoal, context).firstOrNull()
 //                if (goal != null){

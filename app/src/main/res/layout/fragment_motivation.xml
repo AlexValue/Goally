@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MotivationFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/tasks"
+        android:layout_width="164dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="140dp"
+        android:gravity="center"
+        android:text="Задачи на день"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dailyTask1"
+        android:layout_width="318dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="Выполнить 3 задачи"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tasks" />
+
+    <TextView
+        android:id="@+id/dailyTask1Progress"
+        android:layout_width="88dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="0/3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dailyTask1"
+        app:layout_constraintTop_toBottomOf="@+id/tasks" />
+
+    <TextView
+        android:id="@+id/dailyTask2"
+        android:layout_width="318dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="Зайти в приложение"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dailyTask1" />
+
+    <TextView
+        android:id="@+id/dailyTask2Progress"
+        android:layout_width="88dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="0/1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dailyTask1"
+        app:layout_constraintTop_toBottomOf="@+id/dailyTask1Progress" />
+
+    <TextView
+        android:id="@+id/achievements"
+        android:layout_width="164dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="Достижения"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dailyTask2" />
+
+    <TextView
+        android:id="@+id/achievement1"
+        android:layout_width="318dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="Завершить 3 цели"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/achievements" />
+
+    <TextView
+        android:id="@+id/achievement1Progress"
+        android:layout_width="88dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="0/3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/achievement1"
+        app:layout_constraintTop_toBottomOf="@+id/achievements" />
+
+    <TextView
+        android:id="@+id/achievement2"
+        android:layout_width="318dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="Завершить 10 целей"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/achievement1" />
+
+    <TextView
+        android:id="@+id/achievement2Progress"
+        android:layout_width="88dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="0/10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/achievement1"
+        app:layout_constraintTop_toBottomOf="@+id/achievement1Progress" />
+
+    <TextView
+        android:id="@+id/achievement3"
+        android:layout_width="318dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="Завершить 50 целей"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/achievement2" />
+
+    <TextView
+        android:id="@+id/achievement3Progress"
+        android:layout_width="88dp"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="0/50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/achievement2"
+        app:layout_constraintTop_toBottomOf="@+id/achievement2Progress" />
+
+    <TextView
+        android:id="@+id/level"
+        android:layout_width="93dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="106dp"
+        android:text="Уровень:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/experience"
+        android:layout_width="99dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="106dp"
+        android:layout_marginEnd="104dp"
+        android:text="Опыт:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

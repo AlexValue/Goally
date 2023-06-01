@@ -3,77 +3,99 @@ package com.example.mygoallyapp
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [GoalsFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class GoalsFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val tasksButton = findViewById<ImageView>(R.id.imageButton2)
-        val achieveButton = findViewById<ImageView>(R.id.imageButton4)
-
-        // Загружаем первый фрагмент по умолчанию
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, GoalsFragment())
-            .commit()
-
-        tasksButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, GoalsFragment())
-                .commit()
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
         }
+    }
 
-        achieveButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, MotivationFragment())
-                .commit()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_goals, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val currentDateTextView: TextView = view.findViewById(R.id.current_date_text_view)
+        val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy", Locale.getDefault())
+        val currentDate = dateFormat.format(Date())
+        currentDateTextView.text = currentDate
+
+        val scrollView = view.findViewById<ScrollView>(R.id.listGoals)
+        val database = GoalsDatabase.getDatabase(requireContext())
+        val goalDao = database.goalDao()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val goalsBase = goalDao.getAllGoals()
+            withContext(Dispatchers.Main) {
+                showGoalsInScrollView(goalsBase, scrollView, requireContext())
+            }
+
+            val userDao = database.userDao()
+            val currentUser = userDao.getAll().firstOrNull()
+
+            val currentDateTime = System.currentTimeMillis()
+
+            if (currentUser?.isLastLoginOlderThanOneDay(currentDateTime) == true) {
+                val taskDao = database.taskDao()
+                taskDao.resetDailyTasks()
+
+                currentUser.lastLogin = currentDateTime
+                val currentTask = taskDao.getAll()[1]
+                currentTask.isCompleted = true
+                currentUser.experience += currentTask.reward
+
+                userDao.update(currentUser)
+                taskDao.update(currentTask)
+            }
         }
-//        val currentDateTextView: TextView = findViewById(R.id.current_date_text_view)
-//        val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy", Locale.getDefault())
-//        val currentDate = dateFormat.format(Date())
-//        currentDateTextView.text = currentDate
-//
-//        //Добавление нужных в коде элементов интерфеса и получение доступа к базе данных
-//        val scrollView = findViewById<ScrollView>(R.id.listGoals)
-//        val database = GoalsDatabase.getDatabase(application)
-//        val goalDao = database.goalDao()
-//        var goalsBase = goalDao.getAllGoals()
-//        showGoalsInScrollView(goalsBase, scrollView, this)
     }
 
 
-    /**
-    Эта функция принимает поток [Flow] списка [List] [GoalBase] и отображает цели в [ScrollView] с
-    [TextView] для каждой цели. Функция использует [lifecycleScope.launch] для сбора данных из потока
-    в корутине и обновляет представление на основном потоке, используя [ScrollView] и [LinearLayout].
-
-    @param goals - [Flow] из [List] элементов [GoalBase], представляющих список целей, которые будут отображаться.
-    @param scrollView - [ScrollView], где будут отображаться [TextView] с целями.
-    @param context - [Context], используется для создания [LinearLayout] и для преобразования dp в пиксели.
-     */
     fun showGoalsInScrollView(goals: Flow<List<GoalBase>>, scrollView: ScrollView, context: Context) {
         val linearLayout = LinearLayout(context)
         linearLayout.orientation = LinearLayout.VERTICAL
@@ -118,7 +140,8 @@ class MainActivity : AppCompatActivity() {
                     val deadlineTextView = TextView(context)
                     val deadlineDate = goal.getDeadlineAsDate()
                     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-                    val deadlineYear = Calendar.getInstance().apply { time = deadlineDate }.get(Calendar.YEAR)
+                    val deadlineYear = Calendar.getInstance().apply { time = deadlineDate }.get(
+                        Calendar.YEAR)
                     val sdf = if (deadlineYear == currentYear) {
                         SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
                     } else {
@@ -173,26 +196,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-    /**
-    Функция получает масштаб пикселей на экране устройства и умножает на количество dp,
-    чтобы получить эквивалентное количество пикселей в зависимости от разрешения экрана.
-    Также добавляет 0.5f и преобразует результат в целое число, чтобы обеспечить правильное округление
-
-    @param dp - конвертируемое значение
-    @param context - переменная позволяет получать разрешение экрана
-    @return dp
-     */
     fun dpToPx(dp: Float, context: Context): Int {
         val scale = context.resources.displayMetrics.density
         return (dp * scale + 0.5f).toInt()
     }
 
-    fun GoToAddGoal(view: View) {
-        val intent = Intent(this, CreateGoal::class.java)
-        startActivity(intent)
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment GoalsFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            GoalsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }
-
-

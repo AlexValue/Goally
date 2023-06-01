@@ -12,9 +12,10 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo_app"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_app" />
 
     <TextView
         android:id="@+id/textView"
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginTop="28dp"
-        android:text="Goally"
+        android:text="@string/goally"
         android:fontFamily="sans-serif"
         android:textColor="#41C72B"
         android:textSize="20sp"
@@ -38,93 +39,118 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/goals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="75dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
-        android:text="@string/Hello"
-        android:textColor="#434343"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/current_date_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif"
-        android:gravity="start"
-        android:textColor="#A4A4A4"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/goals"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goals" />
-
-
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--        android:id="@+id/floatingActionButton"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginEnd="44dp"-->
-    <!--        android:layout_marginBottom="36dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:contentDescription="@string/Discription"-->
-    <!--        android:onClick="GoToAddGoal"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:srcCompat="@android:drawable/ic_menu_add" />-->
-
-
-    <ImageView
-        android:layout_width="972px"
-        android:layout_height="108px"
-        android:layout_marginTop="156dp"
-        android:src="@drawable/paneltask"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ScrollView
-        android:id="@+id/listGoals"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.example.mygoallyapp.GoalsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="160dp"
-        android:contentDescription="@string/DiscriptionZero"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goals"
-        app:layout_constraintVertical_bias="0.909">
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:src="@drawable/logo_app"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/logo_app" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="6dp"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:text="Goally"-->
+<!--        android:fontFamily="sans-serif"-->
+<!--        android:textColor="#41C72B"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/imageView"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <ImageView-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginTop="22dp"-->
+<!--        android:src="@drawable/three_lines"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/goals"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="30dp"-->
+<!--        android:layout_marginTop="75dp"-->
+<!--        android:fontFamily="sans-serif"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/Hello"-->
+<!--        android:textColor="#434343"-->
+<!--        android:textSize="26sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
+<!--    <TextView-->
+<!--        android:id="@+id/current_date_text_view"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="30dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:fontFamily="sans-serif"-->
+<!--        android:gravity="start"-->
+<!--        android:textColor="#A4A4A4"-->
+<!--        android:textSize="17sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/goals"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/goals" />-->
 
-    </ScrollView>
 
-    <ImageButton
-        android:id="@+id/my_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="90dp"
-        android:background="@drawable/my_button_background"
-        android:contentDescription="@string/Discription"
-        android:onClick="GoToAddGoal"
-        android:scaleType="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/plus" />
+<!--    <ImageView-->
+<!--        android:layout_width="972px"-->
+<!--        android:layout_height="108px"-->
+<!--        android:layout_marginTop="156dp"-->
+<!--        android:src="@drawable/paneltask"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.512"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <ScrollView-->
+<!--        android:id="@+id/listGoals"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="200dp"-->
+<!--        android:layout_marginBottom="160dp"-->
+<!--        android:contentDescription="@string/DiscriptionZero"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/goals"-->
+<!--        app:layout_constraintVertical_bias="0.909"/>-->
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/my_button"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginBottom="90dp"-->
+<!--        android:background="@drawable/my_button_background"-->
+<!--        android:contentDescription="@string/Discription"-->
+<!--        android:onClick="GoToAddGoal"-->
+<!--        android:scaleType="center"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:srcCompat="@drawable/plus" />-->
 
     <ImageButton
         android:id="@+id/imageButton4"

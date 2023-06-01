@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -33,6 +34,7 @@ class CreateGoal : AppCompatActivity() {
         // Настройка кнопки выбора дедлайна
         val deadlineButton = findViewById<Button>(R.id.deadlineButton)
         deadlineButton.setOnClickListener {
+            val currentDateTime = Calendar.getInstance()
             // Открытие DatePickerDialog
             val datePickerDialog = DatePickerDialog(this,
                 { _, year, monthOfYear, dayOfMonth ->
@@ -54,7 +56,7 @@ class CreateGoal : AppCompatActivity() {
                                 .format(selectedDateTime?.time)
                         }, 12, 0, true)
                     timePickerDialog.show()
-                }, 2023, 4, 12)
+                }, currentDateTime.get(Calendar.YEAR), currentDateTime.get(Calendar.MONTH), currentDateTime.get(Calendar.DAY_OF_MONTH))
             datePickerDialog.show()
         }
 
@@ -67,6 +69,7 @@ class CreateGoal : AppCompatActivity() {
             editText.id = idEditText
             ids.add(idEditText)
             editText.setHint("Введите задачу")
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
             // Устанавливаем параметры размещения для нового EditText
             val layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -90,9 +93,6 @@ class CreateGoal : AppCompatActivity() {
         val NameGoal = findViewById<EditText>(R.id.NameGoal)
         nameGoal = NameGoal.text.toString()
 
-
-
-
         // Проходимся по ранее сохраненным id EditText'ов и заполняем лист задач
         val tasksList = mutableListOf<String>()
         if (ids.isNotEmpty()){
@@ -105,7 +105,9 @@ class CreateGoal : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         val database = GoalsDatabase.getDatabase(application)
         val goalDao = database.goalDao()
-        val goalsRepository = OfflineGoalsRepository(goalDao)
+        val userDao = database.userDao()
+        val taskDao = database.taskDao()
+        val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
 
         startActivity(intent)
 
