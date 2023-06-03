@@ -8,10 +8,9 @@
       android:pathData="M95.2,42.42L74.56,6.98C73.48,5.14 71.51,4 69.37,4H30.05C27.87,4 25.87,5.18 24.81,7.08L5.05,42.52C4.01,44.37 4.04,46.64 5.11,48.47L24.79,82.03C25.86,83.87 27.83,85 29.96,85H69.46C71.55,85 73.49,83.91 74.58,82.13L95.13,48.57C96.28,46.69 96.31,44.32 95.2,42.42Z"
       android:strokeWidth="8"
       android:fillColor="#00000000"
-      android:strokeColor="#6F7071"/>
+      android:strokeColor="?attr/colorPrimaryVariant"/>
   <path
       android:pathData="M66.32,44.82C66.32,53.09 59.28,60.05 50.28,60.05C41.27,60.05 34.23,53.09 34.23,44.82C34.23,36.55 41.27,29.59 50.28,29.59C59.28,29.59 66.32,36.55 66.32,44.82Z"
       android:strokeWidth="7"
-      android:fillColor="#F1F2F6"
-      android:strokeColor="#6F7071"/>
+      android:strokeColor="?attr/colorPrimaryVariant"/>
 </vector>

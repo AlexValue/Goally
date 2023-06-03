@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.ScrollView
@@ -128,6 +129,7 @@ class GoalsFragment : Fragment() {
                     textView.text = goal.name
                     textView.id = goal.id
                     textView.gravity = Gravity.LEFT
+
                     textView.setTextColor(Color.BLACK)
                     textView.setPadding(
                         dpToPx(16f, context),

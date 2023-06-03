@@ -3,11 +3,11 @@
     <style name="Theme.MyGoallyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/premierColor</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/background</item>
+        <item name="colorPrimaryVariant">@color/item_fill_light</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/textColor_main_light</item>
+        <item name="colorSecondaryVariant">@color/textColor_second_light</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/background</item> <!-- Цвет верхней строки -->

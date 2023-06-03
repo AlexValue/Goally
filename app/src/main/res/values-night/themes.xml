@@ -2,18 +2,20 @@
     <!-- Base application theme. -->
     <style name="Theme.MyGoallyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/premierColor_dark</item>
+        <item name="colorPrimaryVariant">@color/item_fill_dark</item>
+        <item name="colorOnPrimary">@color/item_background_dark</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondary">@color/textColor_main_dark</item>
+        <item name="colorSecondaryVariant">@color/textColor_second_dark</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@android:color/white</item> <!-- Цвет верхней строки -->
-        <item name="android:windowLightStatusBar">true</item> <!-- Текст на верхней строке будет тёмным -->
+        <item name="android:statusBarColor">@color/blue</item> <!-- Цвет верхней строки -->
+        <item name="android:windowLightStatusBar">false</item> <!-- Текст на верхней строке будет тёмным -->
         <!-- Navigation bar color. -->
-        <item name="android:navigationBarColor">@android:color/white</item> <!-- Цвет панели навигации -->
-        <item name="android:windowLightNavigationBar">true</item> <!-- Цвет иконок на панели навигации будет тёмным -->
+        <item name="android:navigationBarColor">@android:color/black</item> <!-- Цвет панели навигации -->
+        <item name="android:windowLightNavigationBar">false</item> <!-- Цвет иконок на панели навигации будет тёмным -->
+
+        <item name="android:windowBackground">@color/background_dark</item>
     </style>
 </resources>
