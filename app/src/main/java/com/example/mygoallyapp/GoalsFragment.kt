@@ -94,6 +94,23 @@ class GoalsFragment : Fragment() {
                 taskDao.update(currentTask)
             }
         }
+
+        // Приветствие в main
+        val greetingTextView: TextView = view.findViewById(R.id.goals)
+        val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+        val morningStart = 5
+        val dayStart = 12
+        val eveningStart = 18
+
+
+        val greeting: String = when (currentTime) {
+            in morningStart until dayStart -> getString(R.string.morning_greeting)
+            in dayStart until  eveningStart ->getString(R.string.day_greeting)
+            in eveningStart until 24 -> getString(R.string.evening_greeting)
+            else -> getString(R.string.night_greeting)
+        }
+        greetingTextView.text = greeting
     }
 
 

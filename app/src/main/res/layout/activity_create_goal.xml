@@ -9,23 +9,31 @@
 
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/CancelButton"
+        style="@style/NoShadowButtonStyle"
+        android:gravity="center"
         android:layout_width="160dp"
-        android:layout_height="49dp"
+        android:layout_height="38dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="16dp"
+        android:radius="10dp"
         android:text="@string/Cancel"
+        android:textColor="@color/black"
+        android:fontFamily="@font/roboto_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button2"
+        style="@style/NoShadowButtonStyle"
+        android:gravity="center"
         android:layout_width="160dp"
-        android:layout_height="49dp"
+        android:layout_height="38dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
         android:onClick="GoToMain"
         android:text="@string/Save"
+        android:fontFamily="@font/roboto_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -43,12 +51,12 @@
 
     <Button
         android:id="@+id/deadlineButton"
-        android:layout_width="wrap_content"
+        android:layout_width="316dp"
         android:layout_height="wrap_content"
         android:text="@string/ChooseADeadline"
-        app:layout_constraintTop_toBottomOf="@+id/NameGoal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/NameGoal" />
 
 
     <ScrollView
@@ -69,7 +77,7 @@
             <!-- Здесь добавляются все элементы, которые должны прокручиваться -->
             <Button
                 android:id="@+id/CreateTarget"
-                android:layout_width="wrap_content"
+                android:layout_width="316dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"

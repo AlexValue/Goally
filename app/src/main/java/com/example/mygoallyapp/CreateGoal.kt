@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
@@ -19,8 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
 class CreateGoal : AppCompatActivity() {
     var ids = mutableListOf<Int>()
@@ -30,6 +30,14 @@ class CreateGoal : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_goal)
+
+        // Настройка кнопки отмена
+        val cancelButton = findViewById<Button>(R.id.CancelButton)
+        cancelButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.greyLight)
+        cancelButton.elevation = 0f
+        cancelButton.setOnClickListener {
+            finish()
+        }
 
         // Настройка кнопки выбора дедлайна
         val deadlineButton = findViewById<Button>(R.id.deadlineButton)
@@ -52,11 +60,23 @@ class CreateGoal : AppCompatActivity() {
                                 set(Calendar.MINUTE, minute)
                             }
                             // Обновление текста кнопки после выбора времени
-                            deadlineButton.text = SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault())
-                                .format(selectedDateTime?.time)
-                        }, 12, 0, true)
+                            val selectedYear = selectedDateTime?.get(Calendar.YEAR) ?: 0
+                            if (selectedYear != 1970) {
+                                deadlineButton.text =
+                                    SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault())
+                                        .format(selectedDateTime?.time)
+                            } else { deadlineButton.text = "" }
+                        },
+                        currentDateTime.get(Calendar.HOUR_OF_DAY),
+                        currentDateTime.get(Calendar.MINUTE),
+                        true
+                    )
                     timePickerDialog.show()
-                }, currentDateTime.get(Calendar.YEAR), currentDateTime.get(Calendar.MONTH), currentDateTime.get(Calendar.DAY_OF_MONTH))
+                },
+                currentDateTime.get(Calendar.YEAR),
+                currentDateTime.get(Calendar.MONTH),
+                currentDateTime.get(Calendar.DAY_OF_MONTH)
+            )
             datePickerDialog.show()
         }
 
@@ -87,11 +107,17 @@ class CreateGoal : AppCompatActivity() {
         }
     }
 
-
     fun GoToMain(view: View) {
         // Находим EditText с названием цели
         val NameGoal = findViewById<EditText>(R.id.NameGoal)
         nameGoal = NameGoal.text.toString()
+
+        // Проверяем, что цель не пустая, если пустая - не сохраняем
+        if (nameGoal.isEmpty()) {
+            NameGoal.requestFocus()
+            NameGoal.background.setTint(resources.getColor(android.R.color.holo_red_light))
+            return
+        } else { NameGoal.background.setTint(resources.getColor(android.R.color.transparent)) }
 
         // Проходимся по ранее сохраненным id EditText'ов и заполняем лист задач
         val tasksList = mutableListOf<String>()
@@ -104,6 +130,7 @@ class CreateGoal : AppCompatActivity() {
             tasksList.add(nameGoal)
         }
 
+
         val intent = Intent(this, MainActivity::class.java)
         val database = GoalsDatabase.getDatabase(application)
         val goalDao = database.goalDao()
@@ -112,6 +139,8 @@ class CreateGoal : AppCompatActivity() {
         val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
 
         startActivity(intent)
+
+
 
         //Для занесения цели в базу создаём отдельный процесс через корутины
         val context: Context = this
@@ -122,11 +151,10 @@ class CreateGoal : AppCompatActivity() {
                 unfulfilledTasks = tasksList,
                 fulfilledTasks = mutableListOf(),
                 allTask = tasksList.count(),
-                deadline = selectedDateTime?.timeInMillis ?: 0
+                deadline = selectedDateTime?.timeInMillis ?: 0L
             )
             goalsRepository.insertGoal(goalBase, context)
         }
     }
-
 }
 
