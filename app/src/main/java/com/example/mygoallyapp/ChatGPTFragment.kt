@@ -136,7 +136,7 @@ class ChatGPTFragment : Fragment() {
         // setting text on for question on below line.
         //sendGoal.setText("")
 
-        val apiKey="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"
+        val apiKey="YOUR_API"
         val url="https://api.openai.com/v1/engines/text-davinci-003/completions"
         val handledQuestion = "Предоставьте краткий список задач для цели '$question' в следующем формате: \\n---текст подзадачи\\n---текст подзадачи\\n---текст подзадачи\\n\\nЗадачи должны быть краткими и без дополнительных деталей."
         val requestBody="""
