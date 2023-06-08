@@ -18,6 +18,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
@@ -37,9 +38,12 @@ class GoalView : AppCompatActivity() {
 
     private lateinit var linearLayout: LinearLayout
     private lateinit var layoutParams: LinearLayout.LayoutParams
+    private lateinit var goalsDatabase: GoalsDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goal_view)
+
+
 
         val intent = getIntent()
         val goalId = intent.getIntExtra("goal_id", -1)
@@ -54,6 +58,35 @@ class GoalView : AppCompatActivity() {
 
             // Добавляем goalInfoView в корневой макет активности
             mainLayout.addView(goalInfoView)
+        }
+
+        // кнопка удаления цели
+        val deleteButton = findViewById<Button>(R.id.deleteButton)
+        deleteButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.delete)
+        deleteButton.elevation = 0f
+        deleteButton.setOnClickListener{
+            val builder = AlertDialog.Builder(this@GoalView)
+            builder.setTitle("Удаление")
+                .setMessage("Вы уверены, что хотите удалить цель?")
+                .setPositiveButton("Удалить") { dialog, _ ->
+                    deleteGoal(idGoal, this)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Отменить") {dialog, _ ->
+                    dialog.dismiss()
+                }
+            builder.create().show()
+        }
+    }
+
+    private fun deleteGoal(goalId: Int, context: Context) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                val database = GoalsDatabase.getDatabase(context)
+                val goalDao = database.goalDao()
+                goalDao.deleteGoalById(goalId)
+                finish()
+            }
         }
     }
 
@@ -386,32 +419,37 @@ class GoalView : AppCompatActivity() {
             addTask()
         }
 
-        // Создаем новый EditText
-        val editText = EditText(context)
-        // Устанавливаем его идентификатор и текст по умолчанию
-        val idEditText = View.generateViewId()
-        editText.id = idEditText
-        lastId = idEditText
-        ids.add(idEditText)
-        editText.hint = context.getString(R.string.HintTask)
+        if (countUseAddTask > 0) {
 
-        // Устанавливаем параметры размещения для нового EditText
-        val layoutParams = LinearLayout.LayoutParams(
-            (resources.displayMetrics.widthPixels * 0.7).toInt(),
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        layoutParams.gravity = Gravity.CENTER
-        layoutParams.topMargin = resources.getDimension(R.dimen.margin_10dp).toInt()
+            // Создаем новый EditText
+            val editText = EditText(context)
+            // Устанавливаем его идентификатор и текст по умолчанию
+            val idEditText = View.generateViewId()
+            editText.id = idEditText
+            lastId = idEditText
+            ids.add(idEditText)
+            editText.hint = context.getString(R.string.HintTask)
 
-        // Добавляем новый EditText в LinearLayout под ScrollView
-        val linearLayout = addTaskButton.parent as LinearLayout
-        val index = linearLayout.indexOfChild(addTaskButton)
-        linearLayout.addView(editText, index, layoutParams)
+            // Устанавливаем параметры размещения для нового EditText
+            val layoutParams = LinearLayout.LayoutParams(
+                (resources.displayMetrics.widthPixels * 0.7).toInt(),
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.gravity = Gravity.CENTER
+            layoutParams.topMargin = resources.getDimension(R.dimen.margin_10dp).toInt()
 
-        // Сдвигаем кнопку addTaskButton вниз на 15dp
-        val createTargetButtonLayoutParams = addTaskButton.layoutParams as LinearLayout.LayoutParams
-        createTargetButtonLayoutParams.topMargin += resources.getDimension(R.dimen.margin_15dp).toInt()
-        addTaskButton.layoutParams = createTargetButtonLayoutParams
+            // Добавляем новый EditText в LinearLayout под ScrollView
+            val linearLayout = addTaskButton.parent as LinearLayout
+            val index = linearLayout.indexOfChild(addTaskButton)
+            linearLayout.addView(editText, index, layoutParams)
+
+            // Сдвигаем кнопку addTaskButton вниз на 15dp
+            val createTargetButtonLayoutParams =
+                addTaskButton.layoutParams as LinearLayout.LayoutParams
+            createTargetButtonLayoutParams.topMargin += resources.getDimension(R.dimen.margin_15dp)
+                .toInt()
+            addTaskButton.layoutParams = createTargetButtonLayoutParams
+        }
     }
 
     fun addTask(){

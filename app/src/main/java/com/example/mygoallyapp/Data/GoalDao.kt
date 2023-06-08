@@ -20,6 +20,9 @@ interface GoalDao {
 
     @Delete
     fun delete(goal: GoalBase)
+
+    @Query("DELETE FROM goals WHERE id = :goalId")
+    suspend fun deleteGoalById(goalId: Int)
 }
 
 @Dao

@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
@@ -32,24 +33,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tasksButton = findViewById<ImageView>(R.id.imageButton2)
-        val achieveButton = findViewById<ImageView>(R.id.imageButton4)
+        val bottomNavView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
 
         // Загружаем первый фрагмент по умолчанию
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerView, GoalsFragment())
             .commit()
 
-        tasksButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, GoalsFragment())
-                .commit()
-        }
-
-        achieveButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, MotivationFragment())
-                .commit()
+        bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.tasks -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, GoalsFragment())
+                        .commit()
+                    true
+                }
+                R.id.achievement -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, MotivationFragment())
+                        .commit()
+                    true
+                }
+                // Добавьте обработку других элементов навигации
+                else -> false
+            }
         }
 //        val currentDateTextView: TextView = findViewById(R.id.current_date_text_view)
 //        val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy", Locale.getDefault())
@@ -115,6 +122,7 @@ class MainActivity : AppCompatActivity() {
                     )
 
                     // Create Deadline TextView
+
                     val deadlineTextView = TextView(context)
                     val deadlineDate = goal.getDeadlineAsDate()
                     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
