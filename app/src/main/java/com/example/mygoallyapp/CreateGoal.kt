@@ -100,6 +100,8 @@ class CreateGoal : AppCompatActivity() {
                 val editText = findViewById<EditText>(id)
                 tasksList.add(editText.text.toString())
             }
+        } else {
+            tasksList.add(nameGoal)
         }
 
         val intent = Intent(this, MainActivity::class.java)

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         val tasksButton = findViewById<ImageView>(R.id.imageButton2)
         val achieveButton = findViewById<ImageView>(R.id.imageButton4)
+        val chatGPTButton = findViewById<ImageButton>(R.id.imageButton5)
 
         // Загружаем первый фрагмент по умолчанию
         supportFragmentManager.beginTransaction()
@@ -49,6 +51,12 @@ class MainActivity : AppCompatActivity() {
         achieveButton.setOnClickListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, MotivationFragment())
+                .commit()
+        }
+
+        chatGPTButton.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, ChatGPTFragment())
                 .commit()
         }
 //        val currentDateTextView: TextView = findViewById(R.id.current_date_text_view)
