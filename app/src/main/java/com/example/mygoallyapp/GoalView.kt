@@ -367,9 +367,9 @@ class GoalView : AppCompatActivity() {
                 val task50 = taskDao.getAll()[4]
 
                 // Увеличиваем прогресс на 1
-                task3.progress += 1
-                task10.progress += 1
-                task50.progress += 1
+                if(task3.progress < 3) { task3.progress += 1 }
+                if(task10.progress < 10) { task10.progress += 1 }
+                if(task50.progress < 50) { task50.progress += 1 }
 
                 if (task3.progress >= 3 && !task3.isCompleted) {
                     task3.isCompleted = true
