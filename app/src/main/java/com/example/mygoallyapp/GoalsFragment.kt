@@ -94,6 +94,23 @@ class GoalsFragment : Fragment() {
                 taskDao.update(currentTask)
             }
         }
+
+        // Приветствие в main
+        val greetingTextView: TextView = view.findViewById(R.id.goals)
+        val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+        val morningStart = 5
+        val dayStart = 12
+        val eveningStart = 18
+
+
+        val greeting: String = when (currentTime) {
+            in morningStart until dayStart -> getString(R.string.morning_greeting)
+            in dayStart until  eveningStart ->getString(R.string.day_greeting)
+            in eveningStart until 24 -> getString(R.string.evening_greeting)
+            else -> getString(R.string.night_greeting)
+        }
+        greetingTextView.text = greeting
     }
 
 
@@ -140,24 +157,30 @@ class GoalsFragment : Fragment() {
 
                     // Create Deadline TextView
                     val deadlineTextView = TextView(context)
-                    val deadlineDate = goal.getDeadlineAsDate()
-                    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-                    val deadlineYear = Calendar.getInstance().apply { time = deadlineDate }.get(
-                        Calendar.YEAR)
-                    val sdf = if (deadlineYear == currentYear) {
-                        SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
-                    } else {
-                        SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-                    }
-                    deadlineTextView.text = "${sdf.format(deadlineDate)}"
-                    deadlineTextView.setTextColor(Color.parseColor("#FF7A00"))
-                    deadlineTextView.setPadding(
-                        dpToPx(16f, context),
-                        dpToPx(4f, context), // Reduce padding to minimize space
-                        dpToPx(16f, context),
-                        dpToPx(4f, context) // Reduce padding to minimize space
-                    )
+                    val deadline = goal.deadline
 
+                    // Check if the deadline is not zero
+                    if (deadline != 0L) {
+                        val deadlineDate = Date(deadline)
+
+                        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                        val deadlineYear = Calendar.getInstance().apply { time = deadlineDate }.get(
+                            Calendar.YEAR)
+                        val sdf = if (deadlineYear == currentYear) {
+                            SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
+                        } else {
+                            SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+                        }
+
+                        deadlineTextView.text = "${sdf.format(deadlineDate)}"
+                        deadlineTextView.setTextColor(Color.parseColor("#FF7A00"))
+                        deadlineTextView.setPadding(
+                            dpToPx(16f, context),
+                            dpToPx(4f, context), // Reduce padding to minimize space
+                            dpToPx(16f, context),
+                            dpToPx(4f, context) // Reduce padding to minimize space
+                        )
+                    }
 
                     // Create Tasks ratio TextView
                     val tasksRatioTextView = TextView(context)
@@ -184,7 +207,9 @@ class GoalsFragment : Fragment() {
 
                     // Add views to the goalLayout
                     goalLayout.addView(textView)
-                    goalLayout.addView(deadlineTextView)
+                    if (deadline != 0L) {
+                        goalLayout.addView(deadlineTextView)
+                    }
                     goalLayout.addView(tasksRatioTextView)
                     goalLayout.addView(tasksRatioProgressBar)
 

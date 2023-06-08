@@ -3,6 +3,10 @@
     <string name="Goals">Цели</string>
     <string name="Goal">Цель</string>
     <string name="Hello">Добрый день!</string>
+    <string name="morning_greeting">Доброе утро!</string>
+    <string name="day_greeting">Добрый день!</string>
+    <string name="evening_greeting">Добрый вечер!</string>
+    <string name="night_greeting">Доброй ночи!</string>
     <string name="Save">Сохранить</string>
     <string name="Discription">Создать цель</string>
     <string name="HintCreateGoal">Введите название цели</string>
@@ -14,6 +18,7 @@
     <string name="ChooseADeadline">Выберите дедлайн</string>
     <string name="Today">Сегодня</string>
     <string name="Archive">Архив</string>
+    <string name="DeleteGoal">Удалить цель</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="goally">Goally</string>

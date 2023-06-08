@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -19,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
@@ -32,25 +34,46 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tasksButton = findViewById<ImageView>(R.id.imageButton2)
-        val achieveButton = findViewById<ImageView>(R.id.imageButton4)
+
+        val bottomNavView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+//=======
+        //val chatGPTButton = findViewById<ImageButton>(R.id.imageButton5)
 
         // Загружаем первый фрагмент по умолчанию
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerView, GoalsFragment())
             .commit()
 
-        tasksButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, GoalsFragment())
-                .commit()
+        bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.tasks -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, GoalsFragment())
+                        .commit()
+                    true
+                }
+                R.id.achievement -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, MotivationFragment())
+                        .commit()
+                    true
+                }
+                R.id.robotHelp -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, ChatGPTFragment())
+                        .commit()
+                    true
+                }
+                // Добавьте обработку других элементов навигации
+                else -> false
+            }
         }
 
-        achieveButton.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, MotivationFragment())
-                .commit()
-        }
+//        //chatGPTButton.setOnClickListener {
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragmentContainerView, ChatGPTFragment())
+//                .commit()
+//        }
 //        val currentDateTextView: TextView = findViewById(R.id.current_date_text_view)
 //        val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy", Locale.getDefault())
 //        val currentDate = dateFormat.format(Date())
@@ -115,6 +138,7 @@ class MainActivity : AppCompatActivity() {
                     )
 
                     // Create Deadline TextView
+
                     val deadlineTextView = TextView(context)
                     val deadlineDate = goal.getDeadlineAsDate()
                     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
