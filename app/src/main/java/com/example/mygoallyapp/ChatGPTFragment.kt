@@ -3,12 +3,18 @@ package com.example.mygoallyapp
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -86,15 +92,44 @@ class ChatGPTFragment : Fragment() {
                 }
             }
         }
+
+        // Спрятать информацию о роботе после начала ввода текста
+        sendGoal.addTextChangedListener(object : TextWatcher {
+            private var isInputStarted = false
+            private val relativeLayout = requireView().findViewById<RelativeLayout>(R.id.infoRobotHelp)
+            private val frameLayout = requireView().findViewById<FrameLayout>(R.id.inputField)
+            private val tasksScrollView = requireView().findViewById<ScrollView>(R.id.tasks)
+            private val titleRobotHelp = requireView().findViewById<TextView>(R.id.titleRobotHelp)
+
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!isInputStarted) {
+                    isInputStarted = true
+                    val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
+                    relativeLayout.startAnimation(animation)
+                    relativeLayout.visibility = View.GONE
+
+                    // Сдвигаем frameLayout и tasks вверх
+                    val titleBottom = titleRobotHelp.bottom
+                    val frameLayoutTranslationY = (titleBottom - frameLayout.top + 100).toFloat()
+                    val tasksScrollViewTranslationY = (titleBottom - tasksScrollView.top + 300).toFloat()
+
+                    frameLayout.animate().translationY(frameLayoutTranslationY).duration = 400
+                    tasksScrollView.animate().translationY(tasksScrollViewTranslationY).duration = 400
+                }
+            }
+        })
     }
 
-    fun showTasksInScrollView(tasksString: String, scrollView: ScrollView, context: Context) {
-        val trimmedTasksString = if (tasksString.startsWith("\n\n---")) {
-            tasksString.substring(5)
+    fun showGoalsInScrollView(goalsString: String, scrollView: ScrollView, context: Context) {
+        val trimmedGoalsString = if (goalsString.startsWith("\n\n---")) {
+            goalsString.substring(5)
         } else {
-            tasksString
+            goalsString
         }
-        val goals = trimmedTasksString.split("\n---")
+        val goals = trimmedGoalsString.split("\n---")
+
 
         val linearLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
