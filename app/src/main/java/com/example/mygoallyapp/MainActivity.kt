@@ -54,6 +54,12 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                     true
                 }
+                R.id.robotHelp -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, ChatGPTFragment())
+                        .commit()
+                    true
+                }
                 // Добавьте обработку других элементов навигации
                 else -> false
             }

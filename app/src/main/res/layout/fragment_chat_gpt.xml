@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChatGPTFragment">
+
+    <FrameLayout
+        android:id="@+id/inputField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/input_robot"
+            android:layout_width="350dp"
+            android:layout_height="55dp"
+            android:background="@drawable/rounded_square_bg"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/Goal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Введите цель"
+                android:imeActionLabel="Готово"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <ImageButton
+                android:id="@+id/sendButton"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/rounded_square_bg"
+                android:scaleType="fitCenter"
+                android:src="@drawable/send_icon"
+                app:tint="@color/premierColor" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <ScrollView
+        android:id="@+id/tasks"
+        android:layout_width="390dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputField">
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical" />-->
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/titleRobotHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="30dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Помощь робота"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/infoRobotHelp"
+        android:layout_width="350dp"
+        android:layout_height="160dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/rounded_square_info_robot"
+        app:layout_constraintBottom_toTopOf="@+id/inputField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleRobotHelp">
+
+        <ImageView
+            android:id="@+id/infoRobotIcon"
+            android:layout_width="113dp"
+            android:layout_height="121dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/robot_help_image" />
+
+        <TextView
+            android:id="@+id/infoRobotText"
+            android:layout_width="350dp"
+            android:layout_height="160dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/info_robot_text"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:lineSpacingExtra="3dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"/>
+    </RelativeLayout>
+
+<!--    <TextView-->
+<!--        android:id="@+id/tasks"-->
+<!--        android:layout_width="373dp"-->
+<!--        android:layout_height="500dp"-->
+<!--        android:layout_marginStart="31dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:text="Ответ"-->
+<!--        android:textSize="18dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/Goal" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
