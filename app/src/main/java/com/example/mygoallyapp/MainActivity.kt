@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -33,7 +34,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         val bottomNavView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+//=======
+        //val chatGPTButton = findViewById<ImageButton>(R.id.imageButton5)
 
         // Загружаем первый фрагмент по умолчанию
         supportFragmentManager.beginTransaction()
@@ -64,6 +68,12 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+//        //chatGPTButton.setOnClickListener {
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragmentContainerView, ChatGPTFragment())
+//                .commit()
+//        }
 //        val currentDateTextView: TextView = findViewById(R.id.current_date_text_view)
 //        val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy", Locale.getDefault())
 //        val currentDate = dateFormat.format(Date())

@@ -8,7 +8,8 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/textColor_main_dark</item>
         <item name="colorSecondaryVariant">@color/textColor_second_dark</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/textColor_main_dark</item>
+        <item name="colorOnSecondary">@color/background_dark</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/blue</item> <!-- Цвет верхней строки -->
         <item name="android:windowLightStatusBar">false</item> <!-- Текст на верхней строке будет тёмным -->
@@ -17,5 +18,7 @@
         <item name="android:windowLightNavigationBar">false</item> <!-- Цвет иконок на панели навигации будет тёмным -->
 
         <item name="android:windowBackground">@color/background_dark</item>
+
+        <item name="colorOnPrimaryContainer">@color/progress_dark</item>
     </style>
 </resources>

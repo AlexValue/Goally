@@ -7,6 +7,7 @@ import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -121,7 +122,10 @@ class GoalView : AppCompatActivity() {
                 nameTextView.textSize = 18f
                 nameTextView.gravity = Gravity.CENTER
                 //nameTextView.setBackgroundColor(Color.LTGRAY)
-                nameTextView.setTextColor(Color.BLACK)
+                val typedValue = TypedValue()
+                val theme = context.getTheme()
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+                nameTextView.setTextColor(typedValue.data)
                 nameTextView.setPadding(
                     dpToPx(16f, context),
                     dpToPx(8f, context),
@@ -177,7 +181,10 @@ class GoalView : AppCompatActivity() {
         taskTextView.text = task
         taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
         //taskTextView.setBackgroundColor(Color.LTGRAY)
-        taskTextView.setTextColor(Color.BLACK)
+        val typedValue = TypedValue()
+        val theme = context.getTheme()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+        taskTextView.setTextColor(typedValue.data)
         taskTextView.setPadding(
             dpToPx(16f, context),
             dpToPx(8f, context),
@@ -297,7 +304,10 @@ class GoalView : AppCompatActivity() {
                 taskTextView.text = task
                 taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
                 //taskTextView.setBackgroundColor(Color.LTGRAY)
-                taskTextView.setTextColor(Color.BLACK)
+                val typedValue = TypedValue()
+                val theme = context.getTheme()
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+                taskTextView.setTextColor(typedValue.data)
                 taskTextView.setPadding(
                     dpToPx(16f, context),
                     dpToPx(8f, context),
@@ -367,9 +377,9 @@ class GoalView : AppCompatActivity() {
                 val task50 = taskDao.getAll()[4]
 
                 // Увеличиваем прогресс на 1
-                task3.progress += 1
-                task10.progress += 1
-                task50.progress += 1
+                if(task3.progress < 3) { task3.progress += 1 }
+                if(task10.progress < 10) { task10.progress += 1 }
+                if(task50.progress < 50) { task50.progress += 1 }
 
                 if (task3.progress >= 3 && !task3.isCompleted) {
                     task3.isCompleted = true
@@ -460,7 +470,10 @@ class GoalView : AppCompatActivity() {
         goalBaseStart.unfulfilledTasks.add(textInEditText.text.toString())
         additionalTextView.gravity = Gravity.CENTER
         additionalTextView.setBackgroundColor(Color.LTGRAY)
-        additionalTextView.setTextColor(Color.BLACK)
+        val typedValue = TypedValue()
+        val theme = context.getTheme()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+        additionalTextView.setTextColor(typedValue.data)
         additionalTextView.setPadding(
             dpToPx(16f, context),
             dpToPx(8f, context),
@@ -495,7 +508,10 @@ class GoalView : AppCompatActivity() {
 
             // Устанавливаем параметры внешнего вида для нового TextView
             textView.setBackgroundColor(Color.LTGRAY)
-            textView.setTextColor(Color.BLACK)
+            val typedValue = TypedValue()
+            val theme = context.getTheme()
+            theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+            textView.setTextColor(typedValue.data)
             textView.setPadding(
                 dpToPx(16f, context),
                 dpToPx(8f, context),

@@ -2,8 +2,10 @@ package com.example.mygoallyapp
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources.Theme
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -146,8 +148,10 @@ class GoalsFragment : Fragment() {
                     textView.text = goal.name
                     textView.id = goal.id
                     textView.gravity = Gravity.LEFT
-
-                    textView.setTextColor(Color.BLACK)
+                    val typedValue = TypedValue()
+                    val theme = context.getTheme()
+                    theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+                    textView.setTextColor(typedValue.data)
                     textView.setPadding(
                         dpToPx(16f, context),
                         dpToPx(16f, context),
@@ -157,24 +161,30 @@ class GoalsFragment : Fragment() {
 
                     // Create Deadline TextView
                     val deadlineTextView = TextView(context)
-                    val deadlineDate = goal.getDeadlineAsDate()
-                    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-                    val deadlineYear = Calendar.getInstance().apply { time = deadlineDate }.get(
-                        Calendar.YEAR)
-                    val sdf = if (deadlineYear == currentYear) {
-                        SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
-                    } else {
-                        SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-                    }
-                    deadlineTextView.text = "${sdf.format(deadlineDate)}"
-                    deadlineTextView.setTextColor(Color.parseColor("#FF7A00"))
-                    deadlineTextView.setPadding(
-                        dpToPx(16f, context),
-                        dpToPx(4f, context), // Reduce padding to minimize space
-                        dpToPx(16f, context),
-                        dpToPx(4f, context) // Reduce padding to minimize space
-                    )
+                    val deadline = goal.deadline
 
+                    // Check if the deadline is not zero
+                    if (deadline != 0L) {
+                        val deadlineDate = Date(deadline)
+
+                        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                        val deadlineYear = Calendar.getInstance().apply { time = deadlineDate }.get(
+                            Calendar.YEAR)
+                        val sdf = if (deadlineYear == currentYear) {
+                            SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
+                        } else {
+                            SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+                        }
+
+                        deadlineTextView.text = "${sdf.format(deadlineDate)}"
+                        deadlineTextView.setTextColor(Color.parseColor("#FF7A00"))
+                        deadlineTextView.setPadding(
+                            dpToPx(16f, context),
+                            dpToPx(4f, context), // Reduce padding to minimize space
+                            dpToPx(16f, context),
+                            dpToPx(4f, context) // Reduce padding to minimize space
+                        )
+                    }
 
                     // Create Tasks ratio TextView
                     val tasksRatioTextView = TextView(context)
@@ -201,7 +211,9 @@ class GoalsFragment : Fragment() {
 
                     // Add views to the goalLayout
                     goalLayout.addView(textView)
-                    goalLayout.addView(deadlineTextView)
+                    if (deadline != 0L) {
+                        goalLayout.addView(deadlineTextView)
+                    }
                     goalLayout.addView(tasksRatioTextView)
                     goalLayout.addView(tasksRatioProgressBar)
 

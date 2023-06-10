@@ -6,6 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".GoalsFragment">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/logo_app"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_app" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/goally"
+        android:fontFamily="@font/dongle"
+        android:letterSpacing="0.04"
+        android:textColor="#41C72B"
+        android:textSize="40sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/goals"
         android:layout_width="wrap_content"
@@ -37,14 +62,82 @@
         app:layout_constraintTop_toBottomOf="@+id/goals" />
 
     <ImageView
-        android:layout_width="972px"
-        android:layout_height="108px"
+        android:id="@+id/main_widget_bg"
+        android:layout_width="354dp"
+        android:layout_height="41dp"
         android:layout_marginTop="156dp"
-        android:src="@drawable/paneltask"
+        android:src="@drawable/goal_item_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/main_widget_goals_button"
+        android:layout_width="118dp"
+        android:layout_height="41dp"
+        android:background="@null"
+        android:src="@drawable/button_background_rounded"
+        app:layout_constraintStart_toStartOf="@id/main_widget_bg"
+        app:layout_constraintTop_toTopOf="@id/main_widget_bg"
+        app:layout_constraintBottom_toBottomOf="@id/main_widget_bg" />
+
+    <TextView
+        android:id="@+id/main_widget_goals_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="@string/Goals"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@id/main_widget_goals_button"
+        app:layout_constraintEnd_toEndOf="@id/main_widget_goals_button"
+        app:layout_constraintTop_toTopOf="@id/main_widget_goals_button"
+        app:layout_constraintBottom_toBottomOf="@id/main_widget_goals_button" />
+
+    <ImageButton
+        android:id="@+id/main_widget_today_button"
+        android:layout_width="118dp"
+        android:layout_height="41dp"
+        android:background="@null"
+        android:src="@drawable/goal_item_background"
+        app:layout_constraintStart_toEndOf="@id/main_widget_goals_button"
+        app:layout_constraintEnd_toStartOf="@id/main_widget_archive_button"
+        app:layout_constraintTop_toTopOf="@id/main_widget_bg"
+        app:layout_constraintBottom_toBottomOf="@id/main_widget_bg" />
+
+    <TextView
+        android:id="@+id/main_widget_today_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="@string/Today"
+        android:textColor="?attr/colorSecondaryContainer"
+        app:layout_constraintStart_toStartOf="@id/main_widget_today_button"
+        app:layout_constraintEnd_toEndOf="@id/main_widget_today_button"
+        app:layout_constraintTop_toTopOf="@id/main_widget_today_button"
+        app:layout_constraintBottom_toBottomOf="@id/main_widget_today_button" />
+
+    <ImageButton
+        android:id="@+id/main_widget_archive_button"
+        android:layout_width="118dp"
+        android:layout_height="41dp"
+        android:background="@null"
+        android:src="@drawable/goal_item_background"
+        app:layout_constraintEnd_toEndOf="@id/main_widget_bg"
+        app:layout_constraintTop_toTopOf="@id/main_widget_bg"
+        app:layout_constraintBottom_toBottomOf="@id/main_widget_bg" />
+
+    <TextView
+        android:id="@+id/main_widget_archive_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="@string/Archive"
+        android:textColor="?attr/colorSecondaryContainer"
+        app:layout_constraintStart_toStartOf="@id/main_widget_archive_button"
+        app:layout_constraintEnd_toEndOf="@id/main_widget_archive_button"
+        app:layout_constraintTop_toTopOf="@id/main_widget_archive_button"
+        app:layout_constraintBottom_toBottomOf="@id/main_widget_archive_button" />
 
     <ScrollView
         android:id="@+id/listGoals"
