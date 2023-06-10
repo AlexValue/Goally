@@ -26,6 +26,7 @@ import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,7 +43,11 @@ class ChatGPTFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(20, TimeUnit.SECONDS)   // время ожидания подключения
+        .writeTimeout(20, TimeUnit.SECONDS)     // время ожидания записи
+        .readTimeout(30, TimeUnit.SECONDS)      // время ожидания чтения
+        .build()
     lateinit var sendGoal: EditText
     lateinit var send: ImageButton
     lateinit var txtResponse: ScrollView
@@ -66,7 +71,7 @@ class ChatGPTFragment : Fragment() {
         // set onClickListener for 'send' button instead of 'sendGoal'
         send.setOnClickListener {
             // setting response tv on below line.
-            showGoalsInScrollView("Пожалуйста, подождите...", txtResponse, requireContext())
+            showTasksInScrollView("Пожалуйста, подождите...", txtResponse, requireContext())
 //            txtResponse.text = "Please wait.."
 
             // validating text
@@ -75,7 +80,7 @@ class ChatGPTFragment : Fragment() {
             if(question.isNotEmpty()){
                 getResponse(question) { response ->
                     activity?.runOnUiThread {
-                        showGoalsInScrollView(response, txtResponse, requireContext())
+                        showTasksInScrollView(response, txtResponse, requireContext())
 //                        txtResponse.text = response
                     }
                 }
@@ -83,13 +88,13 @@ class ChatGPTFragment : Fragment() {
         }
     }
 
-    fun showGoalsInScrollView(goalsString: String, scrollView: ScrollView, context: Context) {
-        val trimmedGoalsString = if (goalsString.startsWith("\n\n---")) {
-            goalsString.substring(5)
+    fun showTasksInScrollView(tasksString: String, scrollView: ScrollView, context: Context) {
+        val trimmedTasksString = if (tasksString.startsWith("\n\n---")) {
+            tasksString.substring(5)
         } else {
-            goalsString
+            tasksString
         }
-        val goals = trimmedGoalsString.split("\n---")
+        val goals = trimmedTasksString.split("\n---")
 
         val linearLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
