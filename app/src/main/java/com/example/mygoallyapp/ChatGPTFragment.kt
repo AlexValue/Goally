@@ -122,7 +122,7 @@ class ChatGPTFragment : Fragment() {
         })
     }
 
-    fun showGoalsInScrollView(goalsString: String, scrollView: ScrollView, context: Context) {
+    fun showTasksInScrollView(goalsString: String, scrollView: ScrollView, context: Context) {
         val trimmedGoalsString = if (goalsString.startsWith("\n\n---")) {
             goalsString.substring(5)
         } else {
