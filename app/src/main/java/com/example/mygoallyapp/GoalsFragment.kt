@@ -2,8 +2,10 @@ package com.example.mygoallyapp
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources.Theme
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -146,8 +148,10 @@ class GoalsFragment : Fragment() {
                     textView.text = goal.name
                     textView.id = goal.id
                     textView.gravity = Gravity.LEFT
-
-                    textView.setTextColor(Color.BLACK)
+                    val typedValue = TypedValue()
+                    val theme = context.getTheme()
+                    theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+                    textView.setTextColor(typedValue.data)
                     textView.setPadding(
                         dpToPx(16f, context),
                         dpToPx(16f, context),
