@@ -4,13 +4,16 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.util.TypedValue
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
@@ -41,6 +44,8 @@ class CreateGoal : AppCompatActivity() {
 
         // Настройка кнопки выбора дедлайна
         val deadlineButton = findViewById<Button>(R.id.deadlineButton)
+        deadlineButton.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+        deadlineButton.setTextColor(Color.BLACK)
         deadlineButton.setOnClickListener {
             val currentDateTime = Calendar.getInstance()
             // Открытие DatePickerDialog
@@ -81,30 +86,57 @@ class CreateGoal : AppCompatActivity() {
         }
 
         val createTargetButton = findViewById<Button>(R.id.CreateTarget)
+        val scrollView = findViewById<ScrollView>(R.id.scrollView2)
+        val linearLayout = findViewById<LinearLayout>(R.id.scrollView)
         createTargetButton.setOnClickListener {
-            // Создаем новый EditText
-            val editText = EditText(this)
-            // Устанавливаем его идентификатор и текст по умолчанию
-            val idEditText = View.generateViewId()
-            editText.id = idEditText
-            ids.add(idEditText)
-            editText.setHint("Введите задачу")
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-            // Устанавливаем параметры размещения для нового EditText
-            val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            layoutParams.topMargin = resources.getDimension(R.dimen.margin_30dp).toInt()
-            // Добавляем новый EditText на место кнопки CreateTarget
-            val linearLayout = createTargetButton.parent as LinearLayout
-            val index = linearLayout.indexOfChild(createTargetButton)
-            linearLayout.addView(editText, index, layoutParams)
-            // Сдвигаем кнопку CreateTarget вниз на 30dp
-            val createTargetButtonLayoutParams = createTargetButton.layoutParams as LinearLayout.LayoutParams
-            createTargetButtonLayoutParams.topMargin += resources.getDimension(R.dimen.margin_30dp).toInt()
-            createTargetButton.layoutParams = createTargetButtonLayoutParams
+            // Получаем EditText
+            val taskEditText = findViewById<EditText>(R.id.taskEditText)
+            val taskText = taskEditText.text.toString()
+
+            if (taskText.isNotEmpty()) {
+                // Создаем новый TextView для отображения задачи
+                val textView = TextView(this)
+                textView.text = taskText
+
+                //Сохраняем айдишник TextView
+                val idTextView = View.generateViewId()
+                textView.id = idTextView
+                ids.add(idTextView)
+
+                // Устанавливаем шрифт, цвет и размер текста
+                textView.setTypeface(Typeface.create("roboto_medium", Typeface.NORMAL))
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
+                textView.setTextColor(resources.getColor(android.R.color.black))
+
+                // Устанавливаем параметры размещения для нового TextView
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+
+                // Добавляем отступы в параметры размещения
+                layoutParams.topMargin = dpToPx(20)
+                layoutParams.bottomMargin = dpToPx(20)
+                layoutParams.leftMargin = dpToPx(20)
+                layoutParams.rightMargin = dpToPx(20)
+
+                // Добавляем новый TextView в начало списка задач
+                linearLayout.addView(textView, linearLayout.childCount - 1, layoutParams)
+
+                // Очищаем поле ввода задачи
+                taskEditText.text.clear()
+
+                // Прокручиваем ScrollView вверх, чтобы новая задача была видна
+                scrollView.post {
+                    scrollView.fullScroll(ScrollView.FOCUS_UP)
+                }
+            }
         }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val scale = resources.displayMetrics.density
+        return (dp * scale + 0.5f).toInt()
     }
 
     fun GoToMain(view: View) {
@@ -114,17 +146,21 @@ class CreateGoal : AppCompatActivity() {
 
         // Проверяем, что цель не пустая, если пустая - не сохраняем
         if (nameGoal.isEmpty()) {
+            val borderDrawable = resources.getDrawable(R.drawable.rounded_square_bg) as GradientDrawable
+            borderDrawable.setStroke(3, resources.getColor(android.R.color.holo_red_light))
+            NameGoal.background = borderDrawable
             NameGoal.requestFocus()
-            NameGoal.background.setTint(resources.getColor(android.R.color.holo_red_light))
             return
-        } else { NameGoal.background.setTint(resources.getColor(android.R.color.transparent)) }
+        } else {
+            NameGoal.background = resources.getDrawable(R.drawable.rounded_square_bg)
+        }
 
-        // Проходимся по ранее сохраненным id EditText'ов и заполняем лист задач
+        // Проходимся по ранее сохраненным id TextView'ов и заполняем лист задач
         val tasksList = mutableListOf<String>()
         if (ids.isNotEmpty()){
             ids.forEach{id ->
-                val editText = findViewById<EditText>(id)
-                tasksList.add(editText.text.toString())
+                val textView = findViewById<TextView>(id)
+                tasksList.add(textView.text.toString())
             }
         } else {
             tasksList.add(nameGoal)
