@@ -27,7 +27,8 @@ data class GoalBase(
 data class User(
     @PrimaryKey val id: Int,
     var lastLogin: Long,
-    var experience: Int
+    var experience: Int,
+    var countUseChatGPT: Int = 0
 ) {
     fun isLastLoginOlderThanOneDay(inputDate: Long): Boolean {
         val calendar1 = Calendar.getInstance().apply {

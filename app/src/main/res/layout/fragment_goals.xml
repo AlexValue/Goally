@@ -95,7 +95,7 @@
         app:layout_constraintBottom_toBottomOf="@id/main_widget_goals_button" />
 
     <ImageButton
-        android:id="@+id/main_widget_today_button"
+        android:id="@+id/main_widget_tasks_button"
         android:layout_width="118dp"
         android:layout_height="41dp"
         android:background="@null"
@@ -106,16 +106,16 @@
         app:layout_constraintBottom_toBottomOf="@id/main_widget_bg" />
 
     <TextView
-        android:id="@+id/main_widget_today_text"
+        android:id="@+id/main_widget_tasks_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:text="@string/Today"
+        android:text="@string/Tasks"
         android:textColor="?attr/colorSecondaryContainer"
-        app:layout_constraintStart_toStartOf="@id/main_widget_today_button"
-        app:layout_constraintEnd_toEndOf="@id/main_widget_today_button"
-        app:layout_constraintTop_toTopOf="@id/main_widget_today_button"
-        app:layout_constraintBottom_toBottomOf="@id/main_widget_today_button" />
+        app:layout_constraintStart_toStartOf="@id/main_widget_tasks_button"
+        app:layout_constraintEnd_toEndOf="@id/main_widget_tasks_button"
+        app:layout_constraintTop_toTopOf="@id/main_widget_tasks_button"
+        app:layout_constraintBottom_toBottomOf="@id/main_widget_tasks_button" />
 
     <ImageButton
         android:id="@+id/main_widget_archive_button"

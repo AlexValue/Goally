@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -21,7 +22,12 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.example.mygoallyapp.Data.GoalsDatabase
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -57,7 +63,6 @@ class ChatGPTFragment : Fragment() {
     lateinit var sendGoal: EditText
     lateinit var send: ImageButton
     lateinit var txtResponse: ScrollView
-//    lateinit var txtResponse: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,20 +79,32 @@ class ChatGPTFragment : Fragment() {
         send = view.findViewById(R.id.sendButton)
         txtResponse = view.findViewById(R.id.tasks)
 
-        // set onClickListener for 'send' button instead of 'sendGoal'
-        send.setOnClickListener {
-            // setting response tv on below line.
-            showTasksInScrollView("Пожалуйста, подождите...", txtResponse, requireContext())
-//            txtResponse.text = "Please wait.."
 
-            // validating text
-            val question = sendGoal.text.toString().trim()
-            Toast.makeText(context,question, Toast.LENGTH_SHORT).show()
-            if(question.isNotEmpty()){
-                getResponse(question) { response ->
-                    activity?.runOnUiThread {
-                        showTasksInScrollView(response, txtResponse, requireContext())
-//                        txtResponse.text = response
+        send.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val database = GoalsDatabase.getDatabase(requireContext())
+                val userDao = database.userDao()
+                var user = userDao.getAll()[0]
+
+                if(user.countUseChatGPT >= 5){
+                    withContext(Dispatchers.Main) {
+                        showTasksInScrollView("Вы истратили количество запросов на день", txtResponse, requireContext())
+                    }
+                } else {
+                    user.countUseChatGPT++
+                    userDao.update(user)
+
+                    withContext(Dispatchers.Main) {
+                        showTasksInScrollView("Пожалуйста, подождите...", txtResponse, requireContext())
+
+                        val question = sendGoal.text.toString().trim()
+                        if(question.isNotEmpty()){
+                            getResponse(question) { response ->
+                                activity?.runOnUiThread {
+                                    showTasksInScrollView(response, txtResponse, requireContext())
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -176,6 +193,10 @@ class ChatGPTFragment : Fragment() {
         // setting text on for question on below line.
         //sendGoal.setText("")
 
+        val api = "sLWdo3/0Wbo9eRORjGZTBEjiopLxwAy470DfjGKf0WoUnJjfq5bheU6Kg/xSmYJ3xOLL"
+        val apiTag = "CDsEI8o/uE6TE5f/sra9qA=="
+        val encryptedApiKey = Base64.decode(api, Base64.DEFAULT)
+        val encryptedApiTag = Base64.decode(apiTag, Base64.DEFAULT)
         val apiKey="YOUR_API"
         val url="https://api.openai.com/v1/engines/text-davinci-003/completions"
         val handledQuestion = "Предоставьте краткий список задач для цели '$question' в следующем формате: \\n---текст подзадачи\\n---текст подзадачи\\n---текст подзадачи\\n\\nЗадачи должны быть краткими и без дополнительных деталей."
