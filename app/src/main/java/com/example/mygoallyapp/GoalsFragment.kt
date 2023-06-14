@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -75,7 +77,21 @@ class GoalsFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val goalsBase = goalDao.getAllGoals()
             withContext(Dispatchers.Main) {
-                showGoalsInScrollView(goalsBase, scrollView, requireContext())
+                val goalsButton = view.findViewById<ImageButton>(R.id.main_widget_goals_button)
+                val tasksButton = view.findViewById<ImageButton>(R.id.main_widget_tasks_button)
+                val archiveButton = view.findViewById<ImageButton>(R.id.main_widget_archive_button)
+
+                goalsButton.setOnClickListener {
+                    showGoalsInScrollView(goalsBase, scrollView, requireContext(), GoalCondition { goal -> (goal.fulfilledTasks.size - 1) < goal.allTask })
+                }
+                tasksButton.setOnClickListener {
+                    showUnfulfilledTasks(goalsBase, scrollView, requireContext())
+                }
+                archiveButton.setOnClickListener {
+                    showGoalsInScrollView(goalsBase, scrollView, requireContext(), GoalCondition { goal -> (goal.fulfilledTasks.size - 1) >= goal.allTask })
+                }
+
+                showGoalsInScrollView(goalsBase, scrollView, requireContext(), GoalCondition { goal -> (goal.fulfilledTasks.size - 1) < goal.allTask })
             }
 
             val userDao = database.userDao()
@@ -91,6 +107,8 @@ class GoalsFragment : Fragment() {
                 val currentTask = taskDao.getAll()[1]
                 currentTask.isCompleted = true
                 currentUser.experience += currentTask.reward
+
+                currentUser.countUseChatGPT = 0
 
                 userDao.update(currentUser)
                 taskDao.update(currentTask)
@@ -116,7 +134,11 @@ class GoalsFragment : Fragment() {
     }
 
 
-    fun showGoalsInScrollView(goals: Flow<List<GoalBase>>, scrollView: ScrollView, context: Context) {
+    fun interface GoalCondition {
+        fun test(goal: GoalBase): Boolean
+    }
+
+    fun showGoalsInScrollView(goals: Flow<List<GoalBase>>, scrollView: ScrollView, context: Context, condition: GoalCondition) {
         val linearLayout = LinearLayout(context)
         linearLayout.orientation = LinearLayout.VERTICAL
 
@@ -134,91 +156,149 @@ class GoalsFragment : Fragment() {
             goals.collect { goalList ->
                 linearLayout.removeAllViews()
                 goalList.forEach { goal ->
-                    val goalLayout = LinearLayout(context)
-                    goalLayout.orientation = LinearLayout.VERTICAL
-                    goalLayout.setBackgroundResource(R.drawable.goal_item_background)
-                    goalLayout.setOnClickListener {
-                        val intent = Intent(context, GoalView::class.java)
-                        intent.putExtra("goal_id", goal.id)
-                        context.startActivity(intent)
-                    }
-
-                    // Create GoalBase name TextView
-                    val textView = TextView(context)
-                    textView.text = goal.name
-                    textView.id = goal.id
-                    textView.gravity = Gravity.LEFT
-                    val typedValue = TypedValue()
-                    val theme = context.getTheme()
-                    theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
-                    textView.setTextColor(typedValue.data)
-                    textView.setPadding(
-                        dpToPx(16f, context),
-                        dpToPx(16f, context),
-                        dpToPx(16f, context),
-                        dpToPx(4f, context) // Reduce padding to minimize space
-                    )
-
-                    // Create Deadline TextView
-                    val deadlineTextView = TextView(context)
-                    val deadline = goal.deadline
-
-                    // Check if the deadline is not zero
-                    if (deadline != 0L) {
-                        val deadlineDate = Date(deadline)
-
-                        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-                        val deadlineYear = Calendar.getInstance().apply { time = deadlineDate }.get(
-                            Calendar.YEAR)
-                        val sdf = if (deadlineYear == currentYear) {
-                            SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
-                        } else {
-                            SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+                    if (condition.test(goal)) {
+                        val goalLayout = LinearLayout(context)
+                        goalLayout.orientation = LinearLayout.VERTICAL
+                        goalLayout.setBackgroundResource(R.drawable.goal_item_background)
+                        goalLayout.setOnClickListener {
+                            val intent = Intent(context, GoalView::class.java)
+                            intent.putExtra("goal_id", goal.id)
+                            context.startActivity(intent)
                         }
 
-                        deadlineTextView.text = "${sdf.format(deadlineDate)}"
-                        deadlineTextView.setTextColor(Color.parseColor("#FF7A00"))
-                        deadlineTextView.setPadding(
+                        // Create GoalBase name TextView
+                        val textView = TextView(context)
+                        textView.text = goal.name
+                        textView.id = goal.id
+                        textView.gravity = Gravity.LEFT
+                        val typedValue = TypedValue()
+                        val theme = context.getTheme()
+                        theme.resolveAttribute(
+                            com.google.android.material.R.attr.colorSecondaryContainer,
+                            typedValue,
+                            true
+                        )
+                        textView.setTextColor(typedValue.data)
+                        textView.setPadding(
+                            dpToPx(16f, context),
+                            dpToPx(16f, context),
+                            dpToPx(16f, context),
+                            dpToPx(4f, context) // Reduce padding to minimize space
+                        )
+
+                        // Create Deadline TextView
+                        val deadlineTextView = TextView(context)
+                        val deadline = goal.deadline
+
+                        // Check if the deadline is not zero
+                        if (deadline != 0L) {
+                            val deadlineDate = Date(deadline)
+
+                            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                            val deadlineYear =
+                                Calendar.getInstance().apply { time = deadlineDate }.get(
+                                    Calendar.YEAR
+                                )
+                            val sdf = if (deadlineYear == currentYear) {
+                                SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
+                            } else {
+                                SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+                            }
+
+                            deadlineTextView.text = "${sdf.format(deadlineDate)}"
+                            deadlineTextView.setTextColor(Color.parseColor("#FF7A00"))
+                            deadlineTextView.setPadding(
+                                dpToPx(16f, context),
+                                dpToPx(4f, context), // Reduce padding to minimize space
+                                dpToPx(16f, context),
+                                dpToPx(4f, context) // Reduce padding to minimize space
+                            )
+                        }
+
+                        // Create Tasks ratio TextView
+                        val tasksRatioTextView = TextView(context)
+                        tasksRatioTextView.text =
+                            "${goal.fulfilledTasks.size - 1} / ${goal.allTask}"
+                        tasksRatioTextView.setTextColor(Color.parseColor("#909090"))
+                        tasksRatioTextView.setPadding(
                             dpToPx(16f, context),
                             dpToPx(4f, context), // Reduce padding to minimize space
                             dpToPx(16f, context),
                             dpToPx(4f, context) // Reduce padding to minimize space
                         )
+
+                        // Create Tasks ratio ProgressBar
+                        val tasksRatioProgressBar =
+                            ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
+                        tasksRatioProgressBar.progressDrawable =
+                            ContextCompat.getDrawable(context, R.drawable.custom_progress_bar)
+                        tasksRatioProgressBar.max = goal.allTask
+                        tasksRatioProgressBar.progress = goal.fulfilledTasks.size - 1
+                        tasksRatioProgressBar.setPadding(
+                            dpToPx(16f, context),
+                            dpToPx(4f, context), // Reduce padding to minimize space
+                            dpToPx(16f, context),
+                            dpToPx(16f, context)
+                        )
+
+                        // Add views to the goalLayout
+                        goalLayout.addView(textView)
+                        if (deadline != 0L) {
+                            goalLayout.addView(deadlineTextView)
+                        }
+                        goalLayout.addView(tasksRatioTextView)
+                        goalLayout.addView(tasksRatioProgressBar)
+
+                        // Add goalLayout to the main layout
+                        linearLayout.addView(goalLayout, layoutParams)
                     }
 
-                    // Create Tasks ratio TextView
-                    val tasksRatioTextView = TextView(context)
-                    tasksRatioTextView.text = "${goal.fulfilledTasks.size - 1} / ${goal.allTask}"
-                    tasksRatioTextView.setTextColor(Color.parseColor("#909090"))
-                    tasksRatioTextView.setPadding(
-                        dpToPx(16f, context),
-                        dpToPx(4f, context), // Reduce padding to minimize space
-                        dpToPx(16f, context),
-                        dpToPx(4f, context) // Reduce padding to minimize space
-                    )
+                    scrollView.removeAllViews()
+                    scrollView.addView(linearLayout)
+                }
+            }
+        }
+    }
 
-                    // Create Tasks ratio ProgressBar
-                    val tasksRatioProgressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
-                    tasksRatioProgressBar.progressDrawable = ContextCompat.getDrawable(context, R.drawable.custom_progress_bar)
-                    tasksRatioProgressBar.max = goal.allTask
-                    tasksRatioProgressBar.progress = goal.fulfilledTasks.size - 1
-                    tasksRatioProgressBar.setPadding(
-                        dpToPx(16f, context),
-                        dpToPx(4f, context), // Reduce padding to minimize space
-                        dpToPx(16f, context),
-                        dpToPx(16f, context)
-                    )
+    fun showUnfulfilledTasks(goals: Flow<List<GoalBase>>, scrollView: ScrollView, context: Context) {
+        val linearLayout = LinearLayout(context)
+        linearLayout.orientation = LinearLayout.VERTICAL
 
-                    // Add views to the goalLayout
-                    goalLayout.addView(textView)
-                    if (deadline != 0L) {
-                        goalLayout.addView(deadlineTextView)
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            setMargins(
+                dpToPx(16f, context),
+                dpToPx(16f, context),
+                dpToPx(16f, context),
+                dpToPx(4f, context) // Reduce padding to minimize space
+            )
+        }
+
+        lifecycleScope.launch {
+            goals.collect { goalList ->
+                linearLayout.removeAllViews()
+
+                val allUnfulfilledTasks = goalList.flatMap { it.unfulfilledTasks }
+
+                allUnfulfilledTasks.forEach { task ->
+                    // Add task to the linearLayout only if it is not empty
+                    if (task.isNotEmpty()) {
+                        val taskTextView = TextView(context).apply {
+                            text = task
+                            setTextColor(Color.BLACK)
+                            setBackgroundResource(R.drawable.goal_item_background)
+                            setPadding(
+                                dpToPx(16f, context),
+                                dpToPx(16f, context),
+                                dpToPx(16f, context),
+                                dpToPx(16f, context) // Reduce padding to minimize space
+                            )
+                        }
+
+                        linearLayout.addView(taskTextView, layoutParams)
                     }
-                    goalLayout.addView(tasksRatioTextView)
-                    goalLayout.addView(tasksRatioProgressBar)
-
-                    // Add goalLayout to the main layout
-                    linearLayout.addView(goalLayout, layoutParams)
                 }
 
                 scrollView.removeAllViews()
