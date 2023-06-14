@@ -2,6 +2,7 @@ package com.example.mygoallyapp
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -126,6 +127,8 @@ class ChatGPTFragment : Fragment() {
                     val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
                     relativeLayout.startAnimation(animation)
                     relativeLayout.visibility = View.GONE
+                    val examplesFrameLayout = requireView().findViewById<FrameLayout>(R.id.examples)
+                    examplesFrameLayout.visibility = View.GONE
 
                     // Сдвигаем frameLayout и tasks вверх
                     val titleBottom = titleRobotHelp.bottom

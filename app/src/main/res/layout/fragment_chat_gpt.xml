@@ -7,6 +7,61 @@
     tools:context=".ChatGPTFragment">
 
     <FrameLayout
+        android:id="@+id/examples"
+        android:layout_width="350dp"
+        android:layout_height="220dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tasks">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|top"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center|top"
+            android:text="Примеры"
+            android:textColor="@color/black"
+            android:textSize="17dp" />
+
+        <TextView
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/rounded_square_bg"
+            android:paddingLeft="15dp"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center|left"
+            android:text="''Повысить уровень английского до B2''"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/rounded_square_bg"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center|left"
+            android:paddingLeft="15dp"
+            android:text="''Накопить миллион рублей за два года''"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="165dp"
+            android:background="@drawable/rounded_square_bg"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center|left"
+            android:paddingLeft="15dp"
+            android:text="''Научиться программировать за пол года''"
+            android:textSize="16dp" />
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/inputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,31 +91,48 @@
                 android:maxLines="1"
                 android:singleLine="true" />
 
-            <ImageButton
-                android:id="@+id/sendButton"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:layout_marginEnd="5dp"
-                android:background="@drawable/rounded_square_bg"
-                android:scaleType="fitCenter"
-                android:src="@drawable/send_icon"
-                app:tint="@color/premierColor" />
+                android:background="@drawable/rounded_square_send_btn">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/rounded_square_send_btn"
+                    android:scaleType="centerInside" />
+
+                <ImageButton
+                    android:id="@+id/sendButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/send_goal"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    app:tint="@color/white" />
+
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 
     <ScrollView
         android:id="@+id/tasks"
         android:layout_width="390dp"
-        android:layout_height="500dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="520dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputField">
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical" />-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="vertical" />-->
     </ScrollView>
 
     <TextView
@@ -68,13 +140,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginRight="30dp"
         android:fontFamily="@font/roboto_medium"
         android:text="Помощь робота"
-        android:textColor="@color/black"
+        android:textColor="@color/title"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <RelativeLayout
         android:id="@+id/infoRobotHelp"
@@ -90,11 +163,12 @@
 
         <ImageView
             android:id="@+id/infoRobotIcon"
-            android:layout_width="113dp"
-            android:layout_height="121dp"
+            android:layout_width="110dp"
+            android:layout_height="100dp"
+            android:paddingLeft="10dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/robot_help_image" />
+            android:src="@drawable/image_robot_help" />
 
         <TextView
             android:id="@+id/infoRobotText"
@@ -105,10 +179,11 @@
             android:fontFamily="@font/roboto_medium"
             android:text="@string/info_robot_text"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:lineSpacingExtra="3dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"/>
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="10dp"/>
     </RelativeLayout>
 
 <!--    <TextView-->

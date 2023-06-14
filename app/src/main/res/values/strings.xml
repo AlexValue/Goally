@@ -9,7 +9,7 @@
     <string name="night_greeting">Доброй ночи!</string>
     <string name="Save">Сохранить</string>
     <string name="Discription">Создать цель</string>
-    <string name="HintCreateGoal">Введите название цели</string>
+    <string name="HintCreateGoal">Чего вы хотите достичь?</string>
     <string name="CreateNewTask">Создать задачу</string>
     <string name="AddNewTask">Добавить задачу</string>
     <string name="HintTask">Введите задачу</string>

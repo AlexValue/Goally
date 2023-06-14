@@ -30,12 +30,18 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        val bottomNavView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+
+//        val badge = bottomNavigationView.getOrCreateBadge(R.id.tasks)
+//        badge.isVisible=true
+//        badge.number = 90
 //=======
         //val chatGPTButton = findViewById<ImageButton>(R.id.imageButton5)
 
@@ -44,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragmentContainerView, GoalsFragment())
             .commit()
 
-        bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.tasks -> {
                     supportFragmentManager.beginTransaction()

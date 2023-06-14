@@ -39,12 +39,9 @@ class GoalView : AppCompatActivity() {
 
     private lateinit var linearLayout: LinearLayout
     private lateinit var layoutParams: LinearLayout.LayoutParams
-    private lateinit var goalsDatabase: GoalsDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goal_view)
-
-
 
         val intent = getIntent()
         val goalId = intent.getIntExtra("goal_id", -1)
