@@ -6,7 +6,7 @@
     </style>
 
     <style name="BottomNavigationStyle" parent="Widget.Design.BottomNavigationView">
-        <item name="colorSecondaryContainer">@color/bottomNavBackground</item>
+        <item name="colorSecondaryContainer">?attr/colorTertiaryContainer</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:fontFamily">@font/calibri</item>
     </style>

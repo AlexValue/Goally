@@ -62,7 +62,7 @@
             android:fontFamily="@font/roboto_medium"
             android:letterSpacing="0.03"
             android:text="Создание цели"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorSecondaryContainer"
             android:textSize="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +76,8 @@
             android:background="@drawable/rounded_square_bg"
             android:ems="10"
             android:hint="@string/HintCreateGoal"
+            android:textColorHint="?attr/colorSecondaryContainer"
+            android:textColor="?attr/colorSecondaryContainer"
             android:inputType="textCapSentences"
             android:paddingLeft="20dp"
             android:textSize="17dp"
@@ -92,7 +94,9 @@
             android:background="@drawable/rounded_square_bg"
             android:ems="10"
             android:gravity="top|start"
+            android:textColor="?attr/colorSecondaryContainer"
             android:hint="Описание цели"
+            android:textColorHint="?attr/colorSecondaryContainer"
             android:inputType="textCapSentences|textMultiLine"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
@@ -119,6 +123,7 @@
             android:fontFamily="@font/roboto_medium"
             android:gravity="center|start"
             android:hint="@string/ChooseADeadline"
+            android:textColorHint="?attr/colorSecondaryContainer"
             android:letterSpacing="0.05"
             android:paddingLeft="20dp"
             android:textSize="17dp"
@@ -154,24 +159,35 @@
                         android:layout_weight="1"
                         android:background="@drawable/rounded_square_bg"
                         android:hint="Введите задачу"
+                        android:textColorHint="?attr/colorSecondaryContainer"
+                        android:textColor="?attr/colorSecondaryContainer"
                         android:inputType="textCapSentences"
+                        android:textSize="17dp"
                         android:paddingStart="20dp" />
 
-                    <Button
-                        android:id="@+id/CreateTarget"
+                    <FrameLayout
+                        android:id="@+id/buttonContainer"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/rounded_square"
-                        android:fontFamily="@font/roboto_medium"
-                        android:onClick="shiftButton"
-                        android:paddingLeft="14dp"
-                        android:paddingTop="0dp"
-                        android:paddingRight="12dp"
-                        android:paddingBottom="3dp"
-                        android:text="+"
-                        android:textSize="20dp" />
+                        android:background="@drawable/rounded_square">
+
+                        <Button
+                            android:id="@+id/CreateTarget"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/roboto_medium"
+                            android:onClick="shiftButton" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/plus" />
+
+                    </FrameLayout>
 
                 </LinearLayout>
             </LinearLayout>

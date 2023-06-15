@@ -20,5 +20,9 @@
         <item name="android:windowBackground">@color/background_dark</item>
 
         <item name="colorOnPrimaryContainer">@color/progress_dark</item>
+        <item name="colorPrimaryContainer">@color/cancelButtonDark</item>
+        <item name="colorTertiaryContainer">@color/bottomNavBackgroundDark</item>
+        <item name="colorOnTertiaryContainer">@color/selectedIconDark</item>
+        <item name="itemTextColor">@color/selectedIconTextDark</item>
     </style>
 </resources>
