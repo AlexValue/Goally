@@ -10,7 +10,9 @@ import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
@@ -93,9 +95,31 @@ class CreateGoal : AppCompatActivity() {
         val scrollView = findViewById<ScrollView>(R.id.scrollView2)
         val linearLayout = findViewById<LinearLayout>(R.id.scrollView)
 
+        val buttonContainer = findViewById<FrameLayout>(R.id.buttonContainer)
+        buttonContainer.visibility = View.INVISIBLE
+        
+        // Получаем EditText
+        val taskEditText = findViewById<EditText>(R.id.taskEditText)
+
+        taskEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                buttonContainer.visibility = View.VISIBLE
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s?.isNotEmpty() == true) {
+                    buttonContainer.visibility = View.VISIBLE
+                } else {
+                    buttonContainer.visibility = View.INVISIBLE
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+
+
         createTargetButton.setOnClickListener {
-            // Получаем EditText
-            val taskEditText = findViewById<EditText>(R.id.taskEditText)
+
             val taskText = taskEditText.text.toString()
 
             if (taskText.isNotEmpty()) {
@@ -156,15 +180,11 @@ class CreateGoal : AppCompatActivity() {
         val taskEditText = findViewById<EditText>(R.id.taskEditText)
         val taskText = taskEditText.text.toString()
 
+
+
         // Проверяем, что цель не пустая, если пустая - не сохраняем
         if (nameGoal.isEmpty()) {
-            val borderDrawable = resources.getDrawable(R.drawable.rounded_square_bg) as GradientDrawable
-            borderDrawable.setStroke(3, resources.getColor(android.R.color.holo_red_light))
-            NameGoal.background = borderDrawable
-            NameGoal.requestFocus()
             return
-        } else {
-            NameGoal.background = resources.getDrawable(R.drawable.rounded_square_bg)
         }
 
         // Проходимся по ранее сохраненным id TextView'ов и заполняем лист задач
@@ -174,6 +194,7 @@ class CreateGoal : AppCompatActivity() {
                 val textView = findViewById<TextView>(id)
                 tasksList.add(textView.text.toString())
             }
+
             if (taskText.isNotEmpty()) {
                 tasksList.add(taskText)
             }

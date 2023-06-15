@@ -81,14 +81,39 @@ class GoalsFragment : Fragment() {
                 val tasksButton = view.findViewById<ImageButton>(R.id.main_widget_tasks_button)
                 val archiveButton = view.findViewById<ImageButton>(R.id.main_widget_archive_button)
 
+                val goalButtonText = view.findViewById<TextView>(R.id.main_widget_goals_text)
+                val tasksButtonText = view.findViewById<TextView>(R.id.main_widget_tasks_text)
+                val archiveButtonText = view.findViewById<TextView>(R.id.main_widget_archive_text)
+
                 goalsButton.setOnClickListener {
                     showGoalsInScrollView(goalsBase, scrollView, requireContext(), GoalCondition { goal -> (goal.fulfilledTasks.size - 1) < goal.allTask })
+                    goalsButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetActiveColor))
+                    tasksButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetInactiveColor))
+                    archiveButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetInactiveColor))
+
+                    goalButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                    tasksButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                    archiveButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
                 }
                 tasksButton.setOnClickListener {
                     showUnfulfilledTasks(goalsBase, scrollView, requireContext())
+                    goalsButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetInactiveColor))
+                    tasksButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetActiveColor))
+                    archiveButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetInactiveColor))
+
+                    goalButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                    tasksButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                    archiveButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
                 }
                 archiveButton.setOnClickListener {
                     showGoalsInScrollView(goalsBase, scrollView, requireContext(), GoalCondition { goal -> (goal.fulfilledTasks.size - 1) >= goal.allTask })
+                    goalsButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetInactiveColor))
+                    tasksButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetInactiveColor))
+                    archiveButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.widgetActiveColor))
+
+                    goalButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                    tasksButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                    archiveButtonText.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
                 }
 
                 showGoalsInScrollView(goalsBase, scrollView, requireContext(), GoalCondition { goal -> (goal.fulfilledTasks.size - 1) < goal.allTask })

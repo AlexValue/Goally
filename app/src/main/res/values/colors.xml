@@ -39,4 +39,6 @@
     <color name="cancelButtonDark">#3F2F54</color>
     <color name="progressBarTextColor">#DADADA</color>
     <color name="progressBarBackground">#DCDCDC</color>
+    <color name="widgetActiveColor">#F69000</color>
+    <color name="widgetInactiveColor">#FFFFFFFF</color>
 </resources>
