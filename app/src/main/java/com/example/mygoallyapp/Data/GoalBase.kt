@@ -12,12 +12,12 @@ import java.util.Date
 data class GoalBase(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val name: String,
-    val description: String,
+    var name: String,
+    var description: String,
     val unfulfilledTasks: MutableList<String>,
     val fulfilledTasks: MutableList<String>,
     val allTask: Int,
-    val deadline: Long
+    var deadline: Long
 ) {
     fun getDeadlineAsDate(): Date {
         return Date(deadline)
