@@ -285,9 +285,12 @@ class GoalsFragment : Fragment() {
                 allUnfulfilledTasks.forEach { task ->
                     // Add task to the linearLayout only if it is not empty
                     if (task.isNotEmpty()) {
+                        val typedValue = TypedValue()
+                        val theme = context.getTheme()
+                        theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
                         val taskTextView = TextView(context).apply {
                             text = task
-                            setTextColor(Color.BLACK)
+                            setTextColor(typedValue.data)
                             setBackgroundResource(R.drawable.goal_item_background)
                             setPadding(
                                 dpToPx(16f, context),

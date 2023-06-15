@@ -24,7 +24,7 @@
             android:fontFamily="@font/roboto_medium"
             android:gravity="center|top"
             android:text="Примеры"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorSecondaryContainer"
             android:textSize="17dp" />
 
         <TextView
@@ -36,6 +36,7 @@
             android:fontFamily="@font/roboto_medium"
             android:gravity="center|left"
             android:text="''Повысить уровень английского до B2''"
+            android:textColor="?attr/colorSecondaryContainer"
             android:textSize="16dp" />
 
         <TextView
@@ -47,6 +48,7 @@
             android:gravity="center|left"
             android:paddingLeft="15dp"
             android:text="''Накопить миллион рублей за два года''"
+            android:textColor="?attr/colorSecondaryContainer"
             android:textSize="16dp" />
 
         <TextView
@@ -58,6 +60,7 @@
             android:gravity="center|left"
             android:paddingLeft="15dp"
             android:text="''Научиться программировать за пол года''"
+            android:textColor="?attr/colorSecondaryContainer"
             android:textSize="16dp" />
     </FrameLayout>
 
@@ -85,6 +88,8 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="Введите цель"
+                android:textColorHint="?attr/colorSecondaryContainer"
+                android:textColor="?attr/colorSecondaryContainer"
                 android:imeActionLabel="Готово"
                 android:imeOptions="actionDone"
                 android:inputType="text"
@@ -142,7 +147,7 @@
         android:layout_marginTop="25dp"
         android:fontFamily="@font/roboto_medium"
         android:text="Помощь робота"
-        android:textColor="@color/title"
+        android:textColor="?attr/colorSecondaryContainer"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -44,8 +44,12 @@ class CreateGoal : AppCompatActivity() {
 
         // Настройка кнопки выбора дедлайна
         val deadlineButton = findViewById<Button>(R.id.deadlineButton)
-        deadlineButton.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
-        deadlineButton.setTextColor(Color.BLACK)
+        val typedValue = TypedValue()
+        val theme = getTheme()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
+        deadlineButton.backgroundTintList = ColorStateList.valueOf(typedValue.data)
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnSecondaryContainer, typedValue, true)
+        deadlineButton.setTextColor(typedValue.data)
         deadlineButton.setOnClickListener {
             val currentDateTime = Calendar.getInstance()
             // Открытие DatePickerDialog
@@ -88,6 +92,7 @@ class CreateGoal : AppCompatActivity() {
         val createTargetButton = findViewById<Button>(R.id.CreateTarget)
         val scrollView = findViewById<ScrollView>(R.id.scrollView2)
         val linearLayout = findViewById<LinearLayout>(R.id.scrollView)
+
         createTargetButton.setOnClickListener {
             // Получаем EditText
             val taskEditText = findViewById<EditText>(R.id.taskEditText)
@@ -97,6 +102,7 @@ class CreateGoal : AppCompatActivity() {
                 // Создаем новый TextView для отображения задачи
                 val textView = TextView(this)
                 textView.text = taskText
+                textView.setBackgroundResource(R.drawable.goal_item_background)
 
                 //Сохраняем айдишник TextView
                 val idTextView = View.generateViewId()
@@ -106,7 +112,8 @@ class CreateGoal : AppCompatActivity() {
                 // Устанавливаем шрифт, цвет и размер текста
                 textView.setTypeface(Typeface.create("roboto_medium", Typeface.NORMAL))
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
-                textView.setTextColor(resources.getColor(android.R.color.black))
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+                textView.setTextColor(typedValue.data)
 
                 // Устанавливаем параметры размещения для нового TextView
                 val layoutParams = LinearLayout.LayoutParams(
