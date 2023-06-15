@@ -24,7 +24,7 @@
     <color name="item_fill_light">#6F7071</color>
     <color name="item_fill_dark">#644C86</color>
     <color name="progress_light">#27CF0B</color>
-    <color name="progress_dark">#3EB42B</color>
+    <color name="progress_dark">#F69000</color>
     <color name="send">#7DDB61</color>
     <color name="title">#000000</color>
     <color name="bottomNavBackground">#FEDDBD</color>
@@ -37,5 +37,6 @@
     <color name="noSelectedIcon">#474747</color>
     <color name="cancelButtonLight">#DCD8D8</color>
     <color name="cancelButtonDark">#3F2F54</color>
-
+    <color name="progressBarTextColor">#DADADA</color>
+    <color name="progressBarBackground">#DCDCDC</color>
 </resources>

@@ -5,6 +5,7 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -76,6 +77,7 @@ class MotivationFragment : Fragment() {
         val dailyTask1Image : ImageView = view.findViewById(R.id.dailyTask1Image)
         val dailyTask2Image : ImageView = view.findViewById(R.id.dailyTask2Image)
 
+
         lifecycleScope.launch(Dispatchers.IO) {
             val database = GoalsDatabase.getDatabase(requireContext())
             val taskDao = database.taskDao()
@@ -95,7 +97,7 @@ class MotivationFragment : Fragment() {
 
             withContext(Dispatchers.Main) {
                 level.text = "Уровень: ${levelUser}"
-                experience.text = "${experienceUser}/100"
+                experience.text = "Опыт: $experienceUser/100"
                 levelProgressBar.progress = experienceUser
             }
 
@@ -144,11 +146,11 @@ class MotivationFragment : Fragment() {
                         achievement1ProgressBar.max = 3
                         achievement1ProgressBar.progress = task.progress
 
-                        val saturation = if (achievement1ProgressBar.progress == achievement1ProgressBar.max) 1f else 0f
-                        val matrix = ColorMatrix()
-                        matrix.setSaturation(saturation)
-                        val filter = ColorMatrixColorFilter(matrix)
-                        achievement1Image.colorFilter = filter
+                        if (task.progress == achievement1ProgressBar.max) {
+                            achievement1Image.setImageResource(R.drawable.medal_three_tasks)
+                        } else {
+                            achievement1Image.setImageResource(R.drawable.medal_three_gray)
+                        }
                     }
                 }
             }
@@ -160,11 +162,11 @@ class MotivationFragment : Fragment() {
                         achievement2ProgressBar.max = 10
                         achievement2ProgressBar.progress = task.progress
 
-                        val saturation = if (achievement2ProgressBar.progress == achievement2ProgressBar.max) 1f else 0f
-                        val matrix = ColorMatrix()
-                        matrix.setSaturation(saturation)
-                        val filter = ColorMatrixColorFilter(matrix)
-                        achievement2Image.colorFilter = filter
+                        if (task.progress == achievement2ProgressBar.max) {
+                            achievement2Image.setImageResource(R.drawable.medal_ten_tasks)
+                        } else {
+                            achievement2Image.setImageResource(R.drawable.medal_ten_gray)
+                        }
                     }
                 }
             }
@@ -176,11 +178,11 @@ class MotivationFragment : Fragment() {
                         achievement3ProgressBar.max = 50
                         achievement3ProgressBar.progress = task.progress
 
-                        val saturation = if (achievement3ProgressBar.progress == achievement3ProgressBar.max) 1f else 0f
-                        val matrix = ColorMatrix()
-                        matrix.setSaturation(saturation)
-                        val filter = ColorMatrixColorFilter(matrix)
-                        achievement3Image.colorFilter = filter
+                        if (task.progress == achievement3ProgressBar.max) {
+                            achievement3Image.setImageResource(R.drawable.medal_fifty_tasks)
+                        } else {
+                            achievement3Image.setImageResource(R.drawable.medal_fifty_gray)
+                        }
                     }
                 }
             }

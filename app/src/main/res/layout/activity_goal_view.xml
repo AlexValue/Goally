@@ -114,6 +114,7 @@
                     android:id="@+id/Tasks"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginTop="40dp"
                     android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="@string/Tasks"
