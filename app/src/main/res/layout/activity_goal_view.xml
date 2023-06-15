@@ -6,6 +6,124 @@
     android:layout_height="match_parent"
     tools:context=".GoalView">
 
+    <ImageButton
+        android:id="@+id/GoToMain"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:onClick="GoToMain"
+        android:background="@null"
+        android:contentDescription="@string/DiscriptionZero"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeCloseDrawable"
+        app:tint="@android:color/black" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.03"
+        android:text="@string/Goal"
+        android:textColor="@color/black"
+        android:textSize="22dp"
+        app:layout_constraintBottom_toBottomOf="@+id/GoToMain"
+        app:layout_constraintStart_toEndOf="@+id/GoToMain"
+        app:layout_constraintTop_toTopOf="@+id/GoToMain" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GoToMain"
+        app:layout_constraintBottom_toTopOf="@+id/deleteButton">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Все остальные элементы размещаются здесь -->
+                <EditText
+                    android:id="@+id/NameGoal"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/rounded_square_bg"
+                    android:ems="10"
+                    android:hint="@string/HintCreateGoal"
+                    android:inputType="textCapSentences"
+                    android:paddingLeft="20dp"
+                    android:textSize="17dp"
+                    android:focusable="false"/>
+
+                <EditText
+                    android:id="@+id/DescriptionGoal"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="105dp"
+                    android:background="@drawable/rounded_square_bg"
+                    android:ems="10"
+                    android:hint="Описание цели"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:gravity="top|start"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:textSize="17dp"
+                    android:scrollbars="vertical"
+                    android:focusable="false"/>
+
+                <Button
+                    android:id="@+id/deadlineButton"
+                    style="@style/NoShadowButtonStyle"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="@drawable/rounded_square_bg"
+                    android:drawableEnd="@drawable/calendar_small"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center|start"
+                    android:hint="@string/ChooseADeadline"
+                    android:letterSpacing="0.05"
+                    android:paddingStart="20dp"
+                    android:textSize="17dp" />
+
+                <TextView
+                    android:id="@+id/Tasks"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="@string/Tasks"
+                    android:textColor="@color/grey"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+    </ScrollView>
+
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="350dp"
@@ -18,51 +136,90 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:onClick="GoToMain"
-        android:contentDescription="@string/DiscriptionZero"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable" />
+<!--    <EditText-->
+<!--        android:id="@+id/NameGoal"-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="52dp"-->
+<!--        android:layout_marginTop="25dp"-->
+<!--        android:background="@drawable/rounded_square_bg"-->
+<!--        android:ems="10"-->
+<!--        android:hint="@string/HintCreateGoal"-->
+<!--        android:inputType="textCapSentences"-->
+<!--        android:paddingLeft="20dp"-->
+<!--        android:textSize="17dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView3" />-->
 
+<!--    <EditText-->
+<!--        android:id="@+id/DescriptionGoal"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="105dp"-->
+<!--        android:background="@drawable/rounded_square_bg"-->
+<!--        android:ems="10"-->
+<!--        android:hint="Описание цели"-->
+<!--        android:inputType="textCapSentences|textMultiLine"-->
+<!--        android:gravity="top|start"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:paddingLeft="20dp"-->
+<!--        android:paddingBottom="10dp"-->
+<!--        android:paddingEnd="20dp"-->
+<!--        android:textSize="17dp"-->
+<!--        android:scrollbars="vertical"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/NameGoal"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
-    <TextView
-        android:id="@+id/NameGoal"
-        android:layout_width="58dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/DiscriptionZero"
-        android:gravity="center"
-        android:text="@string/Goal"
-        android:textColor="?attr/colorSecondaryContainer"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.098"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/deadlineButton"-->
+<!--        style="@style/NoShadowButtonStyle"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="55dp"-->
+<!--        android:background="@drawable/rounded_square_bg"-->
+<!--        android:drawableEnd="@drawable/calendar_small"-->
+<!--        android:drawablePadding="10dp"-->
+<!--        android:fontFamily="@font/roboto_medium"-->
+<!--        android:gravity="center|start"-->
+<!--        android:hint="@string/ChooseADeadline"-->
+<!--        android:letterSpacing="0.05"-->
+<!--        android:paddingStart="20dp"-->
+<!--        android:textSize="17dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/DescriptionGoal" />-->
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="408dp"
-        android:layout_height="538dp"
-        android:contentDescription="@string/DiscriptionZero"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NameGoal">
+<!--    <TextView-->
+<!--        android:id="@+id/Tasks"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/Tasks"-->
+<!--        android:fontFamily="@font/roboto_medium"-->
+<!--        android:textColor="@color/grey"-->
+<!--        android:textSize="17dp"-->
+<!--        android:layout_width="150dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/deadlineButton" />-->
 
-        <LinearLayout
-            android:id="@+id/main_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
+<!--    <ScrollView-->
+<!--        android:id="@+id/scrollView"-->
+<!--        android:layout_width="408dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:contentDescription="@string/DiscriptionZero"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/Tasks">-->
 
-    </ScrollView>
+<!--        <LinearLayout-->
+<!--            android:id="@+id/main_layout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"></LinearLayout>-->
+
+<!--    </ScrollView>-->
 
     <!--    <ScrollView-->
 <!--        android:id="@+id/scrollCreate"-->

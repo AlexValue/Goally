@@ -13,6 +13,7 @@ data class GoalBase(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
+    val description: String,
     val unfulfilledTasks: MutableList<String>,
     val fulfilledTasks: MutableList<String>,
     val allTask: Int,
