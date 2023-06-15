@@ -40,39 +40,35 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:orientation="horizontal">
-
-                <ProgressBar
-                    android:id="@+id/levelProgressBar"
-                    style="@style/TasksProgressBar"
-                    android:layout_width="270dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="3dp"
-                    android:progressTint="@color/progress_light" />
+                android:orientation="vertical">
 
                 <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:src="@drawable/exp" />
+                    <ProgressBar
+                        android:id="@+id/levelProgressBar"
+                        style="@style/TasksProgressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginTop="3dp"
+                        android:progressTint="@color/progress_dark" />
 
                     <TextView
                         android:id="@+id/experience"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="3dp"
+
                         android:fontFamily="@font/roboto_condensed_bold"
                         android:gravity="center"
-                        android:text="100"
-                        android:textColor="#FFFFFF"
-                        android:textSize="12sp" />
+                        android:letterSpacing="0.05"
+                        android:text="Опыт: 40/100"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
                 </FrameLayout>
             </LinearLayout>
 
@@ -157,8 +153,8 @@
                     <ImageView
                         android:id="@+id/dailyTask1Image"
                         android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center|end"
+                        android:layout_height="28dp"
+                        android:layout_gravity="bottom|center"
                         android:paddingRight="7dp"
                         android:src="@drawable/uncheck_daily" />
                 </LinearLayout>
@@ -192,7 +188,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
+                            android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
                             <ProgressBar
@@ -221,9 +217,10 @@
                     <ImageView
                         android:id="@+id/dailyTask2Image"
                         android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center|end"
+                        android:layout_height="40dp"
+                        android:layout_gravity="bottom|center"
                         android:paddingRight="7dp"
+                        android:paddingBottom="4dp"
                         android:src="@drawable/uncheck_daily" />
                 </LinearLayout>
             </LinearLayout>
@@ -269,6 +266,7 @@
                         android:src="@drawable/medal_three_tasks"
                         android:layout_gravity="center"
                         android:layout_marginStart="3dp"
+                        android:layout_marginTop="5dp"
                         android:padding="8dp" />
 
                     <LinearLayout
@@ -278,7 +276,7 @@
 
                         <TextView
                             android:id="@+id/achievement1"
-                            android:layout_width="260dp"
+                            android:layout_width="210dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="5dp"
@@ -338,7 +336,7 @@
 
                     <TextView
                         android:id="@+id/achievement2"
-                        android:layout_width="260dp"
+                        android:layout_width="210dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
@@ -392,6 +390,7 @@
                         android:src="@drawable/medal_fifty_tasks"
                         android:layout_gravity="center"
                         android:layout_marginStart="3dp"
+                        android:layout_marginBottom="5dp"
                         android:padding="8dp" />
 
                     <LinearLayout
@@ -401,7 +400,7 @@
 
                     <TextView
                         android:id="@+id/achievement3"
-                        android:layout_width="260dp"
+                        android:layout_width="210dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
