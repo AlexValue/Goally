@@ -11,10 +11,10 @@
         <item name="colorSecondaryContainer">@color/textColor_main_dark</item>
         <item name="colorOnSecondary">@color/background_dark</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/blue</item> <!-- Цвет верхней строки -->
+        <item name="android:statusBarColor">@color/background_dark</item> <!-- Цвет верхней строки -->
         <item name="android:windowLightStatusBar">false</item> <!-- Текст на верхней строке будет тёмным -->
         <!-- Navigation bar color. -->
-        <item name="android:navigationBarColor">@android:color/black</item> <!-- Цвет панели навигации -->
+        <item name="android:navigationBarColor">@color/background_dark</item> <!-- Цвет панели навигации -->
         <item name="android:windowLightNavigationBar">false</item> <!-- Цвет иконок на панели навигации будет тёмным -->
 
         <item name="android:windowBackground">@color/background_dark</item>
