@@ -17,7 +17,7 @@ class OfflineGoalsRepository(
             .flowOn(Dispatchers.IO)
     }
 
-    override fun getGoalStream(id: Int, context: Context): GoalBase? {
+    override fun getGoalStream(id: Int, context: Context): Flow<GoalBase?> {
         return getDatabase(context.applicationContext).goalDao().getGoalById(id)
 //            .map { it } // преобразование Flow<*> в Flow<GoalBase>
 //            .flowOn(Dispatchers.IO)

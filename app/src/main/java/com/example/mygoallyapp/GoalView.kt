@@ -64,7 +64,7 @@ class GoalView : AppCompatActivity() {
         val database = GoalsDatabase.getDatabase(this)
         lifecycleScope.launch (Dispatchers.IO) {
             val goalDao = database.goalDao()
-            val goal = goalDao.getGoalById(idGoal)
+            val goal = goalDao.getGoal(idGoal)
             withContext(Dispatchers.Main) {
                 if (goal != null) {
                     val NameGoal = findViewById<EditText>(R.id.NameGoal)
@@ -176,8 +176,8 @@ class GoalView : AppCompatActivity() {
         val taskDao = database.taskDao()
         val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
 
-        lifecycleScope.launch (Dispatchers.IO) {
-            val goal = goalDao.getGoalById(id)
+        lifecycleScope.launch {
+            val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
             if (goal != null) {
                 goalBaseStart = goal
 
@@ -228,7 +228,7 @@ class GoalView : AppCompatActivity() {
         val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
 
         lifecycleScope.launch {
-            val goal = goalDao.getGoalById(id)
+            val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
             if (goal != null) {
                 goalBaseStart = goal
                 val rootLayout = LinearLayout(context)
@@ -490,14 +490,18 @@ class GoalView : AppCompatActivity() {
 
         if (isChecked) {
             updatedUnfulfilledTasks.remove(task)
+            goalBaseStart.unfulfilledTasks.remove(task)
             updatedFulfilledTasks.add(task)
+            goalBaseStart.fulfilledTasks.add(task)
         } else {
             updatedFulfilledTasks.remove(task)
+            goalBaseStart.fulfilledTasks.add(task)
             updatedUnfulfilledTasks.add(task)
+            goalBaseStart.unfulfilledTasks.remove(task)
         }
 
         val updatedGoal = goal.copy(unfulfilledTasks = updatedUnfulfilledTasks, fulfilledTasks = updatedFulfilledTasks)
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             goalsRepository.updateGoal(updatedGoal, this@GoalView)
 
             // Здесь мы проверяем, пуст ли список невыполненных задач

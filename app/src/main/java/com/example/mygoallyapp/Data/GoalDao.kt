@@ -10,7 +10,10 @@ interface GoalDao {
     fun getAllGoals(): Flow<List<GoalBase>>
 
     @Query("SELECT * FROM Goals WHERE id = :goalId")
-    fun getGoalById(goalId: Int): GoalBase?
+    fun getGoalById(goalId: Int): Flow<GoalBase?>
+
+    @Query("SELECT * FROM Goals WHERE id = :goalId")
+    fun getGoal(goalId: Int): GoalBase?
 
     @Insert
     fun insert(goal: GoalBase)

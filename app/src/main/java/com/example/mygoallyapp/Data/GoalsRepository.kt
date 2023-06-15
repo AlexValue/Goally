@@ -12,7 +12,7 @@ interface GoalsRepository {
     /**
      * Retrieve an item from the given data source that matches with the [id].
      */
-    fun getGoalStream(id: Int, context: Context): GoalBase?
+    fun getGoalStream(id: Int, context: Context): Flow<GoalBase?>
 
 
     /**
