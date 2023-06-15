@@ -62,10 +62,11 @@
         app:layout_constraintTop_toBottomOf="@+id/goals" />
 
     <ImageView
+
         android:id="@+id/main_widget_bg"
         android:layout_width="354dp"
         android:layout_height="41dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="170dp"
         android:src="@drawable/goal_item_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.500"
@@ -143,8 +144,9 @@
         android:id="@+id/listGoals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="160dp"
+        android:layout_marginTop="245dp"
+        android:layout_marginBottom="75dp"
+
         android:contentDescription="@string/DiscriptionZero"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

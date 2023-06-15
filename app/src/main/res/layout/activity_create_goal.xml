@@ -182,10 +182,11 @@
                             android:onClick="shiftButton" />
 
                         <ImageView
-                            android:layout_width="30dp"
+                            android:id="@+id/arrow_left"
+                            android:layout_width="25dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/plus" />
+                            android:src="@drawable/arrow_left" />
 
                     </FrameLayout>
 

@@ -7,38 +7,29 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mygoallyapp.Data.GoalBase
 import com.example.mygoallyapp.Data.GoalsDatabase
 import com.example.mygoallyapp.Data.OfflineGoalsRepository
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
+
 
 class GoalView : AppCompatActivity() {
     var idGoal = -1
@@ -147,7 +138,8 @@ class GoalView : AppCompatActivity() {
         deleteButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.delete)
         deleteButton.elevation = 0f
         deleteButton.setOnClickListener{
-            val builder = AlertDialog.Builder(this@GoalView)
+            val builder = MaterialAlertDialogBuilder(this@GoalView, R.style.AlertDialogTheme)
+           // androidx.appcompat.app.AlertDialog.Builder(this@GoalView, R.style.AlertDialogTheme)
             builder.setTitle("Удаление")
                 .setMessage("Вы уверены, что хотите удалить цель?")
                 .setPositiveButton("Удалить") { dialog, _ ->
@@ -157,6 +149,7 @@ class GoalView : AppCompatActivity() {
                 .setNegativeButton("Отменить") {dialog, _ ->
                     dialog.dismiss()
                 }
+
             builder.create().show()
         }
     }
