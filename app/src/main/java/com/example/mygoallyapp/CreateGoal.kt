@@ -68,7 +68,7 @@ class CreateGoal : AppCompatActivity() {
                             val selectedYear = selectedDateTime?.get(Calendar.YEAR) ?: 0
                             if (selectedYear != 1970) {
                                 deadlineButton.text =
-                                    SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault())
+                                    SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
                                         .format(selectedDateTime?.time)
                             } else { deadlineButton.text = "" }
                         },
@@ -143,6 +143,11 @@ class CreateGoal : AppCompatActivity() {
         // Находим EditText с названием цели
         val NameGoal = findViewById<EditText>(R.id.NameGoal)
         nameGoal = NameGoal.text.toString()
+        val DescriptionGoal = findViewById<EditText>(R.id.TextGoal)
+        val descriptionGoal = DescriptionGoal.text.toString()
+
+        val taskEditText = findViewById<EditText>(R.id.taskEditText)
+        val taskText = taskEditText.text.toString()
 
         // Проверяем, что цель не пустая, если пустая - не сохраняем
         if (nameGoal.isEmpty()) {
@@ -162,10 +167,16 @@ class CreateGoal : AppCompatActivity() {
                 val textView = findViewById<TextView>(id)
                 tasksList.add(textView.text.toString())
             }
+            if (taskText.isNotEmpty()) {
+                tasksList.add(taskText)
+            }
         } else {
-            tasksList.add(nameGoal)
+            if (taskText.isNotEmpty()) {
+                tasksList.add(taskText)
+            } else {
+                tasksList.add(nameGoal)
+            }
         }
-
 
         val intent = Intent(this, MainActivity::class.java)
         val database = GoalsDatabase.getDatabase(application)
@@ -184,6 +195,7 @@ class CreateGoal : AppCompatActivity() {
             // асинхронные операции здесь
             val goalBase = GoalBase(
                 name = nameGoal,
+                description = descriptionGoal,
                 unfulfilledTasks = tasksList,
                 fulfilledTasks = mutableListOf(),
                 allTask = tasksList.count(),

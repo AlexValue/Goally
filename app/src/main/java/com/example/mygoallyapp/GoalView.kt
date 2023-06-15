@@ -2,10 +2,14 @@ package com.example.mygoallyapp
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -29,13 +33,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class GoalView : AppCompatActivity() {
     var idGoal = -1
     var ids = mutableListOf<Int>()
     var lastId = -1
     var countUseAddTask = 0
-    var goalBaseStart = GoalBase( name = "", unfulfilledTasks = mutableListOf(), fulfilledTasks = mutableListOf(), allTask = 0, deadline = 0)
+    var goalBaseStart = GoalBase( name = "", description = "", unfulfilledTasks = mutableListOf(), fulfilledTasks = mutableListOf(), allTask = 0, deadline = 0)
 
     private lateinit var linearLayout: LinearLayout
     private lateinit var layoutParams: LinearLayout.LayoutParams
@@ -47,7 +54,7 @@ class GoalView : AppCompatActivity() {
         val goalId = intent.getIntExtra("goal_id", -1)
         idGoal = goalId
 
-        showGoalInfo1(goalId, this) { goalInfoView ->
+        showGoalInfo(goalId, this) { goalInfoView ->
             // Получаем корневой макет активности
             val mainLayout = findViewById<LinearLayout>(R.id.main_layout)
 
@@ -84,6 +91,69 @@ class GoalView : AppCompatActivity() {
                 val goalDao = database.goalDao()
                 goalDao.deleteGoalById(goalId)
                 finish()
+            }
+        }
+    }
+
+    fun showGoalInfo(id: Int, context: Context, onGoalInfoReady: (View) -> Unit) {
+        val database = GoalsDatabase.getDatabase(context)
+        val goalDao = database.goalDao()
+        val userDao = database.userDao()
+        val taskDao = database.taskDao()
+        val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
+
+        lifecycleScope.launch {
+            val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
+            if (goal != null) {
+                goalBaseStart = goal
+
+                val NameGoal = findViewById<EditText>(R.id.NameGoal)
+                val DescriptionGoal = findViewById<EditText>(R.id.DescriptionGoal)
+                val DeadLineButton = findViewById<Button>(R.id.deadlineButton)
+                NameGoal.setText(goal.name)
+                DescriptionGoal.setText(goal.description)
+                DeadLineButton.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+                DeadLineButton.setTextColor(Color.BLACK)
+                val deadlineDate = Date(goal.deadline)
+                val format = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
+                val deadlineString = format.format(deadlineDate)
+                DeadLineButton.text = deadlineString
+
+                val rootLayout = LinearLayout(context)
+                rootLayout.orientation = LinearLayout.VERTICAL
+                rootLayout.setBackgroundResource(R.drawable.goal_item_background)
+                val rootLayoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+//                rootLayoutParams.setMargins(
+//                    dpToPx(8f, context),
+//                    dpToPx(8f, context),
+//                    dpToPx(8f, context),
+//                    dpToPx(8f, context)
+//                )
+                rootLayout.layoutParams = rootLayoutParams
+
+                val tasksLayout = LinearLayout(context)
+                tasksLayout.orientation = LinearLayout.VERTICAL
+                rootLayout.addView(tasksLayout)
+
+                goal.unfulfilledTasks.forEach { task ->
+                    if (task.isNotBlank()) { // Add this line to check if the task is not empty
+                        createTaskLayout(context, task, goal, goalsRepository, tasksLayout)
+                    }
+                }
+
+                val completedTasksLayout = LinearLayout(context)
+                completedTasksLayout.orientation = LinearLayout.VERTICAL
+                completedTasksLayout.setBackgroundResource(R.drawable.box_task_completed)
+
+                displayFulfilledTasks(goal, completedTasksLayout, context)
+                if (goal.fulfilledTasks.isNotEmpty()) {
+                    tasksLayout.addView(completedTasksLayout)
+                }
+
+                onGoalInfoReady(rootLayout)
             }
         }
     }
@@ -160,8 +230,8 @@ class GoalView : AppCompatActivity() {
     ) {
         val taskLayout = LinearLayout(context)
         taskLayout.orientation = LinearLayout.HORIZONTAL
-        taskLayout.gravity = Gravity.END
-        taskLayout.setBackgroundResource(R.drawable.box_task)
+        //taskLayout.gravity = Gravity.END
+        //taskLayout.setBackgroundResource(R.drawable.box_task)
         val taskLayoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -280,11 +350,9 @@ class GoalView : AppCompatActivity() {
 
     private fun displayFulfilledTasks(goal: GoalBase, tasksLayout: LinearLayout, context: Context) {
         goal.fulfilledTasks.forEach { task ->
-            if (task.isNotBlank()) { // Add this line to check if the task is not empty
+            if (task.isNotBlank()) {
                 val taskLayout = LinearLayout(context)
                 taskLayout.orientation = LinearLayout.HORIZONTAL
-                taskLayout.gravity = Gravity.END
-                taskLayout.setBackgroundResource(R.drawable.box_task)
                 val taskLayoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -300,11 +368,24 @@ class GoalView : AppCompatActivity() {
                 val taskTextView = TextView(context)
                 taskTextView.text = task
                 taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
-                //taskTextView.setBackgroundColor(Color.LTGRAY)
-                val typedValue = TypedValue()
-                val theme = context.getTheme()
-                theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
-                taskTextView.setTextColor(typedValue.data)
+
+                // Create a new SpannableStringBuilder with the given text
+                val spannableString = SpannableStringBuilder(task)
+
+                // Set the ForegroundColorSpan on the entire length of the text
+                spannableString.setSpan(
+                    ForegroundColorSpan(Color.parseColor("#578925")),  // Set the custom green color
+                    0,                                                 // Start of the span (inclusive)
+                    task.length,                                       // End of the span (exclusive)
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                // Apply the colorized text to the TextView
+                taskTextView.text = spannableString
+
+                // Set the text color to the custom green color
+                taskTextView.setTextColor(Color.parseColor("#578925"))
+
                 taskTextView.setPadding(
                     dpToPx(16f, context),
                     dpToPx(8f, context),
@@ -319,10 +400,6 @@ class GoalView : AppCompatActivity() {
 
                 // Add strike-through to fulfilled tasks
                 strikeThroughText(taskTextView, true)
-                if (taskTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG != Paint.STRIKE_THRU_TEXT_FLAG) {
-                    Log.e("GoalView", "Task '$task' is not struck through.")
-                }
-
 
                 val checkmarkView = ImageView(context)
                 checkmarkView.setImageResource(R.drawable.checkmark)
@@ -410,7 +487,14 @@ class GoalView : AppCompatActivity() {
                 updatedUnfulfilledTasks.forEach { unfulfilledTask ->
                     createTaskLayout(context, unfulfilledTask, updatedGoal, goalsRepository, tasksLayout)
                 }
-                displayFulfilledTasks(updatedGoal, tasksLayout, context)
+
+                val completedTasksLayout = LinearLayout(context)
+                completedTasksLayout.orientation = LinearLayout.VERTICAL
+                completedTasksLayout.setBackgroundResource(R.drawable.box_task_completed)
+
+                displayFulfilledTasks(updatedGoal, completedTasksLayout, context)
+//                displayFulfilledTasks(updatedGoal, tasksLayout, context)
+                tasksLayout.addView(completedTasksLayout)
             }
         }
     }
