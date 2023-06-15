@@ -30,7 +30,7 @@
                 android:fontFamily="@font/roboto_condensed_bold"
                 android:letterSpacing="0.05"
                 android:text="Уровень:"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorSecondaryContainer"
                 android:textSize="17dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -83,7 +83,7 @@
                 android:gravity="center"
                 android:letterSpacing="0.05"
                 android:text="Испытания на сегодня"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorSecondaryContainer"
                 android:textSize="17dp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -118,6 +118,7 @@
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
+                        android:textColor="?attr/colorSecondaryContainer"
                         android:text="Выполнить 3 задачи"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tasks" />
@@ -181,6 +182,7 @@
                             android:layout_marginBottom="5dp"
                             android:fontFamily="@font/roboto_medium"
                             android:gravity="center"
+                            android:textColor="?attr/colorSecondaryContainer"
                             android:text="Зайти в приложение"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/dailyTask1" />
@@ -236,7 +238,7 @@
                 android:gravity="center"
                 android:letterSpacing="0.05"
                 android:text="Достижения"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorSecondaryContainer"
                 android:textSize="17dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -282,6 +284,7 @@
                             android:layout_marginBottom="5dp"
                             android:fontFamily="@font/roboto_medium"
                             android:gravity="center"
+                            android:textColor="?attr/colorSecondaryContainer"
                             android:text="Завершить 3 цели" />
 
                         <LinearLayout
@@ -343,6 +346,7 @@
                         android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="Завершить 10 целей"
+                        android:textColor="?attr/colorSecondaryContainer"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/achievement1" />
 
@@ -407,6 +411,7 @@
                         android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="Завершить 50 целей"
+                        android:textColor="?attr/colorSecondaryContainer"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/achievement2" />
 
