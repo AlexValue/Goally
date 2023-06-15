@@ -69,8 +69,7 @@
                     android:textColor="?attr/colorSecondaryContainer"
                     android:inputType="textCapSentences"
                     android:paddingLeft="20dp"
-                    android:textSize="17dp"
-                    android:focusable="false"/>
+                    android:textSize="17dp"/>
 
                 <EditText
                     android:id="@+id/DescriptionGoal"
@@ -89,8 +88,7 @@
                     android:paddingBottom="10dp"
                     android:paddingEnd="20dp"
                     android:textSize="17dp"
-                    android:scrollbars="vertical"
-                    android:focusable="false"/>
+                    android:scrollbars="vertical"/>
 
                 <Button
                     android:id="@+id/deadlineButton"

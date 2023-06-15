@@ -1,5 +1,7 @@
 package com.example.mygoallyapp
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -28,11 +30,14 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class GoalView : AppCompatActivity() {
     var idGoal = -1
     var ids = mutableListOf<Int>()
     var lastId = -1
     var countUseAddTask = 0
+    private var selectedDateTime: Calendar? = null
+    var useDeadLineButton: Boolean = false
     var goalBaseStart = GoalBase( name = "", description = "", unfulfilledTasks = mutableListOf(), fulfilledTasks = mutableListOf(), allTask = 0, deadline = 0)
 
     private lateinit var linearLayout: LinearLayout
@@ -54,6 +59,78 @@ class GoalView : AppCompatActivity() {
 
             // Добавляем goalInfoView в корневой макет активности
             mainLayout.addView(goalInfoView)
+        }
+
+        val database = GoalsDatabase.getDatabase(this)
+        lifecycleScope.launch (Dispatchers.IO) {
+            val goalDao = database.goalDao()
+            val goal = goalDao.getGoalById(idGoal)
+            withContext(Dispatchers.Main) {
+                if (goal != null) {
+                    val NameGoal = findViewById<EditText>(R.id.NameGoal)
+                    val DescriptionGoal = findViewById<EditText>(R.id.DescriptionGoal)
+                    val DeadLineButton = findViewById<Button>(R.id.deadlineButton)
+                    NameGoal.setText(goal.name)
+                    DescriptionGoal.setText(goal.description)
+                    DeadLineButton.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+                    DeadLineButton.setTextColor(Color.BLACK)
+                    val deadlineDate = Date(goal.deadline)
+                    val format = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
+                    val deadlineString = format.format(deadlineDate)
+                    if (goal.deadline != 0L) {
+                        DeadLineButton.text = deadlineString
+                    }
+                    DeadLineButton.setOnClickListener {
+                        useDeadLineButton = true
+                        val currentDateTime = Calendar.getInstance()
+                        // Открытие DatePickerDialog
+                        val datePickerDialog = DatePickerDialog(
+                            this@GoalView,
+                            { _, year, monthOfYear, dayOfMonth ->
+                                // Создаем календарь с выбранной датой
+                                val date = Calendar.getInstance().apply {
+                                    set(year, monthOfYear, dayOfMonth)
+                                }
+                                // Открытие TimePickerDialog после выбора даты
+                                val timePickerDialog = TimePickerDialog(
+                                    this@GoalView,
+                                    { _, hourOfDay, minute ->
+                                        // Создаем новый календарь, объединяя выбранную дату и время
+                                        selectedDateTime = Calendar.getInstance().apply {
+                                            time = date.time // Устанавливаем выбранную дату
+                                            set(
+                                                Calendar.HOUR_OF_DAY,
+                                                hourOfDay
+                                            ) // Устанавливаем выбранное время
+                                            set(Calendar.MINUTE, minute)
+                                        }
+                                        // Обновление текста кнопки после выбора времени
+                                        val selectedYear = selectedDateTime?.get(Calendar.YEAR) ?: 0
+                                        if (selectedYear != 1970) {
+                                            DeadLineButton.text =
+                                                SimpleDateFormat(
+                                                    "dd MMM yyyy HH:mm",
+                                                    Locale.getDefault()
+                                                )
+                                                    .format(selectedDateTime?.time)
+                                        } else {
+                                            DeadLineButton.text = ""
+                                        }
+                                    },
+                                    currentDateTime.get(Calendar.HOUR_OF_DAY),
+                                    currentDateTime.get(Calendar.MINUTE),
+                                    true
+                                )
+                                timePickerDialog.show()
+                            },
+                            currentDateTime.get(Calendar.YEAR),
+                            currentDateTime.get(Calendar.MONTH),
+                            currentDateTime.get(Calendar.DAY_OF_MONTH)
+                        )
+                        datePickerDialog.show()
+                    }
+                }
+            }
         }
 
         // кнопка удаления цели
@@ -95,26 +172,10 @@ class GoalView : AppCompatActivity() {
         val taskDao = database.taskDao()
         val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
 
-        lifecycleScope.launch {
-            val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
+        lifecycleScope.launch (Dispatchers.IO) {
+            val goal = goalDao.getGoalById(id)
             if (goal != null) {
                 goalBaseStart = goal
-
-                val NameGoal = findViewById<EditText>(R.id.NameGoal)
-                val DescriptionGoal = findViewById<EditText>(R.id.DescriptionGoal)
-                val DeadLineButton = findViewById<Button>(R.id.deadlineButton)
-                NameGoal.setText(goal.name)
-                DescriptionGoal.setText(goal.description)
-                val typedValue = TypedValue()
-                val theme = context.getTheme()
-                theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
-                DeadLineButton.backgroundTintList = ColorStateList.valueOf(typedValue.data)
-                theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
-                DeadLineButton.setTextColor(typedValue.data)
-                val deadlineDate = Date(goal.deadline)
-                val format = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
-                val deadlineString = format.format(deadlineDate)
-                DeadLineButton.text = deadlineString
 
                 val rootLayout = LinearLayout(context)
                 rootLayout.orientation = LinearLayout.VERTICAL
@@ -163,7 +224,7 @@ class GoalView : AppCompatActivity() {
         val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
 
         lifecycleScope.launch {
-            val goal = goalsRepository.getGoalStream(id, context).firstOrNull()
+            val goal = goalDao.getGoalById(id)
             if (goal != null) {
                 goalBaseStart = goal
                 val rootLayout = LinearLayout(context)
@@ -612,34 +673,49 @@ class GoalView : AppCompatActivity() {
 
     fun GoToMain(view: View){
         val context = this
-        if (countUseAddTask > 0){
+//        if (countUseAddTask > 0){
+//            val database = GoalsDatabase.getDatabase(context)
+//            val goalDao = database.goalDao()
+//            val userDao = database.userDao()
+//            val taskDao = database.taskDao()
+//            val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
+//            lifecycleScope.launch {
+////                val goal = goalsRepository.getGoalStream(idGoal, context).firstOrNull()
+////                if (goal != null){
+////                    val newNameGoal = goal.name
+////                    var newTasks = goal.tasks
+////                    if (ids.isNotEmpty()){
+////                        ids.forEach{id ->
+////                            val editText = findViewById<EditText>(id)
+////                            newTasks.add(editText.text.toString())
+////                        }
+////                    }
+////                    val newGoal = GoalBase(
+////                        id = goal.id,
+////                        name = newNameGoal,
+////                        tasks = newTasks
+////                    )
+////              }
+////                    goalsRepository.updateGoal(newGoal, context)
+//                val editText = findViewById<EditText>(lastId)
+//                goalBaseStart.unfulfilledTasks.add(editText.text.toString())
+//                goalsRepository.updateGoal(goalBaseStart, context)
+//            }
+//        }
+
+        val NameGoal = findViewById<EditText>(R.id.NameGoal)
+        val DescriptionGoal = findViewById<EditText>(R.id.DescriptionGoal)
+        if (useDeadLineButton) {
+            var deadline = selectedDateTime?.timeInMillis ?: 0L
+            goalBaseStart.deadline = deadline
+        }
+        goalBaseStart.name = NameGoal.text.toString()
+        goalBaseStart.description = DescriptionGoal.text.toString()
+
+        lifecycleScope.launch (Dispatchers.IO){
             val database = GoalsDatabase.getDatabase(context)
             val goalDao = database.goalDao()
-            val userDao = database.userDao()
-            val taskDao = database.taskDao()
-            val goalsRepository = OfflineGoalsRepository(goalDao, userDao, taskDao)
-            lifecycleScope.launch {
-//                val goal = goalsRepository.getGoalStream(idGoal, context).firstOrNull()
-//                if (goal != null){
-//                    val newNameGoal = goal.name
-//                    var newTasks = goal.tasks
-//                    if (ids.isNotEmpty()){
-//                        ids.forEach{id ->
-//                            val editText = findViewById<EditText>(id)
-//                            newTasks.add(editText.text.toString())
-//                        }
-//                    }
-//                    val newGoal = GoalBase(
-//                        id = goal.id,
-//                        name = newNameGoal,
-//                        tasks = newTasks
-//                    )
-//              }
-//                    goalsRepository.updateGoal(newGoal, context)
-                val editText = findViewById<EditText>(lastId)
-                goalBaseStart.unfulfilledTasks.add(editText.text.toString())
-                goalsRepository.updateGoal(goalBaseStart, context)
-            }
+            goalDao.update(goalBaseStart)
         }
 
         var intent = Intent(this, MainActivity::class.java)
