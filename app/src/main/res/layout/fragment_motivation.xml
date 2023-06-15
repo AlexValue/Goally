@@ -55,7 +55,8 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginTop="3dp"
-                        android:progressTint="@color/progress_dark" />
+                        android:progressTint="@color/premierColor"
+                        />
 
                     <TextView
                         android:id="@+id/experience"

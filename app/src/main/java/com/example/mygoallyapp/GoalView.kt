@@ -304,7 +304,7 @@ class GoalView : AppCompatActivity() {
 
         val taskTextView = TextView(context)
         taskTextView.text = task
-        taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
+        taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.LEFT
         //taskTextView.setBackgroundColor(Color.LTGRAY)
         val typedValue = TypedValue()
         val theme = context.getTheme()
@@ -425,7 +425,7 @@ class GoalView : AppCompatActivity() {
 
                 val taskTextView = TextView(context)
                 taskTextView.text = task
-                taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
+                taskTextView.gravity = Gravity.CENTER_VERTICAL or Gravity.LEFT
 
                 // Create a new SpannableStringBuilder with the given text
                 val spannableString = SpannableStringBuilder(task)
