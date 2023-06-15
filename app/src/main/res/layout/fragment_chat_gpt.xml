@@ -87,7 +87,7 @@
                 android:hint="Введите цель"
                 android:imeActionLabel="Готово"
                 android:imeOptions="actionDone"
-                android:inputType="text"
+                android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:singleLine="true" />
 
