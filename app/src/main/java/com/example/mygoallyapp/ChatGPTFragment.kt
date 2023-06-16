@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.*
+import java.net.URLEncoder
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import android.widget.EditText
@@ -196,58 +197,11 @@ class ChatGPTFragment : Fragment() {
     }
 
     fun getResponse(question: String, callback: (String) -> Unit){
-
-        // setting text on for question on below line.
-        //sendGoal.setText("")
-
-//        val api = "sLWdo3/0Wbo9eRORjGZTBEjiopLxwAy470DfjGKf0WoUnJjfq5bheU6Kg/xSmYJ3xOLL"
-//        val apiTag = "CDsEI8o/uE6TE5f/sra9qA=="
-//        val keyB = "Y3QzVVFqeG5oMTBaZ2N4TQ=="
-//
-//        val encodedCombined = "3lUTJuNlX5qd7k3+n7C+/KjBec06afCCUBIH5TT8q4plPw0xw3c5aoHOkHtRQrXNAmtu/YEpZmRR4Gix1CjYSyngOrWsHp2ewZ2Kk0ha1lkXaFA="
-//
-//        val encryptionKeyBytes = "ct3UQjxnh10ZgcxM".toByteArray(Charsets.UTF_8)
-//        val combined = Base64.decode(encodedCombined, Base64.DEFAULT)
-//
-//        // Извлечение nonce, тега и зашифрованных данных
-//        val nonce = combined.sliceArray(0..11)
-//        val encryptedDataWithTag = combined.sliceArray(12 until combined.size)
-//
-//        if (encryptedDataWithTag.size < 16) {
-//            throw RuntimeException("The combined data size is too small")
-//        }
-//
-//        val secretKey = SecretKeySpec(encryptionKeyBytes, "AES")
-//        val gcmSpec = GCMParameterSpec(128 * 8, nonce)
-//
-//        val tagSizeBytes = 16
-//        val encryptedData = encryptedDataWithTag.sliceArray(0 until encryptedDataWithTag.size - tagSizeBytes)
-//        val tag = encryptedDataWithTag.sliceArray(encryptedDataWithTag.size - tagSizeBytes until encryptedDataWithTag.size)
-//
-//        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-//        cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmSpec)
-//
-//// Pass in the encrypted data and tag separately
-//        val decryptedData = cipher.doFinal(encryptedData + tag)
-//
-//        val decryptedApiKey = String(decryptedData, Charsets.UTF_8)
-
-        val apiKey="YOUR_API"
-        val url="https://api.openai.com/v1/engines/text-davinci-003/completions"
-        val handledQuestion = "Предоставьте краткий список задач для цели '$question' в следующем формате: \\n---текст подзадачи\\n---текст подзадачи\\n---текст подзадачи\\n\\nЗадачи должны быть краткими и без дополнительных деталей."
-        val requestBody="""
-            {
-            "prompt": "$handledQuestion",
-            "max_tokens": 350,
-            "temperature": 0
-            }
-        """.trimIndent()
+        val encodedInput = URLEncoder.encode(question, "UTF-8")
 
         val request = Request.Builder()
-            .url(url)
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", "Bearer $apiKey")
-            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
+            .url("https://famous-marzipan-f2f861.netlify.app/.netlify/functions/api?question=$encodedInput")
+            .get()
             .build()
 
         client.newCall(request).enqueue(object : Callback {
