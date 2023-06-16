@@ -141,16 +141,17 @@ class GoalView : AppCompatActivity() {
         val deleteButton = findViewById<Button>(R.id.deleteButton)
         deleteButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.delete)
         deleteButton.elevation = 0f
-        deleteButton.setOnClickListener{
+        deleteButton.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(this@GoalView, R.style.AlertDialogTheme)
-           // androidx.appcompat.app.AlertDialog.Builder(this@GoalView, R.style.AlertDialogTheme)
             builder.setTitle("Удаление")
                 .setMessage("Вы уверены, что хотите удалить цель?")
                 .setPositiveButton("Удалить") { dialog, _ ->
-                    deleteGoal(idGoal, this)
-                    dialog.dismiss()
+                    lifecycleScope.launch {
+                        deleteGoal(idGoal, this@GoalView)
+                        dialog.dismiss()
+                    }
                 }
-                .setNegativeButton("Отменить") {dialog, _ ->
+                .setNegativeButton("Отменить") { dialog, _ ->
                     dialog.dismiss()
                 }
 
@@ -158,15 +159,11 @@ class GoalView : AppCompatActivity() {
         }
     }
 
-    private fun deleteGoal(goalId: Int, context: Context) {
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                val database = GoalsDatabase.getDatabase(context)
-                val goalDao = database.goalDao()
-                goalDao.deleteGoalById(goalId)
-                finish()
-            }
-        }
+    private suspend fun deleteGoal(goalId: Int, context: Context) {
+        val database = GoalsDatabase.getDatabase(context)
+        val goalDao = database.goalDao()
+        goalDao.deleteGoalById(goalId)
+        finish()
     }
 
     fun showGoalInfo(id: Int, context: Context, onGoalInfoReady: (View) -> Unit) {
