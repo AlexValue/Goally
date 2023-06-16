@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -83,7 +84,6 @@ class ChatGPTFragment : Fragment() {
         sendGoal = view.findViewById(R.id.Goal)
         send = view.findViewById(R.id.sendButton)
         txtResponse = view.findViewById(R.id.tasks)
-
 
         send.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
@@ -173,7 +173,10 @@ class ChatGPTFragment : Fragment() {
             val textView = TextView(context).apply {
                 text = goal
                 gravity = Gravity.LEFT
-                setTextColor(Color.BLACK)
+                val typedValue = TypedValue()
+                val theme = requireContext().getTheme()
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSecondaryContainer, typedValue, true)
+                setTextColor(typedValue.data)
                 setBackgroundResource(R.drawable.goal_item_background)
                 setPadding(
                     dpToPx(16f, context),

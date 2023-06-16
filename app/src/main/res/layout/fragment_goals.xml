@@ -99,7 +99,7 @@
         android:layout_width="118dp"
         android:layout_height="41dp"
         android:background="@null"
-        android:src="@drawable/goal_item_background"
+        android:src="@drawable/button_background_rounded_unactive"
         app:layout_constraintStart_toEndOf="@id/main_widget_goals_button"
         app:layout_constraintEnd_toStartOf="@id/main_widget_archive_button"
         app:layout_constraintTop_toTopOf="@id/main_widget_bg"
@@ -122,7 +122,7 @@
         android:layout_width="118dp"
         android:layout_height="41dp"
         android:background="@null"
-        android:src="@drawable/goal_item_background"
+        android:src="@drawable/button_background_rounded_unactive"
         app:layout_constraintEnd_toEndOf="@id/main_widget_bg"
         app:layout_constraintTop_toTopOf="@id/main_widget_bg"
         app:layout_constraintBottom_toBottomOf="@id/main_widget_bg" />
