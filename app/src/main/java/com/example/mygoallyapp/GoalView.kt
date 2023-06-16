@@ -501,7 +501,7 @@ class GoalView : AppCompatActivity() {
         }
 
         val updatedGoal = goal.copy(unfulfilledTasks = updatedUnfulfilledTasks, fulfilledTasks = updatedFulfilledTasks)
-        lifecycleScope.launch {
+        lifecycleScope.launch (Dispatchers.IO) {
             goalsRepository.updateGoal(updatedGoal, this@GoalView)
 
             // Здесь мы проверяем, пуст ли список невыполненных задач
